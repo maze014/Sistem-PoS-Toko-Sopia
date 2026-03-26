@@ -2,6 +2,7 @@ CREATE DATABASE db_toko_sopia;
 
 USE db_toko_sopia;
 
+-- buat table user
 CREATE TABLE user (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     name_depan VARCHAR(50) NOT NULL,
@@ -10,3 +11,11 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL
 );
+
+ -- data user dummy
+INSERT INTO user (name_depan, nama_belakang, username, password, role) 
+VALUES 
+('Budi', 'Santoso', 'admin_sopia', 'atmin_budi', 'admin'),
+('Siti', 'Aminah', 'manajer_sopia', 'siti_lohyacik', 'manajer'),
+('Andi', 'Pratama', 'kasir1_sopia', 'andi_kasir', 'kasir'),
+('Dewi', 'Lestari', 'kasir2_sopia', 'dewi_kasir', 'kasir');
