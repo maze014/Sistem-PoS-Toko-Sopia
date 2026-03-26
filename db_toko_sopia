@@ -1,0 +1,12 @@
+CREATE DATABASE db_toko_sopia;
+
+USE db_toko_sopia;
+
+CREATE TABLE user (
+    id_user INT AUTO_INCREMENT PRIMARY KEY,
+    name_depan VARCHAR(50) NOT NULL,
+    nama_belakang VARCHAR(50),
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL
+);
