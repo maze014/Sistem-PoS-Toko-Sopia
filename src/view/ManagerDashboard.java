@@ -3,7 +3,6 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class ManagerDashboard extends JFrame {
 
@@ -19,6 +18,20 @@ public class ManagerDashboard extends JFrame {
         getContentPane().setBackground(bgColor);
         setLayout(new BorderLayout());
 
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(1000, 600));
+        setResizable(true); // Biar layoutnya gak berantakan kalau di-resize
+
+        this.addWindowStateListener(e -> {
+            // Jika status berubah dari Full Screen ke Normal
+            if ((e.getOldState() & Frame.MAXIMIZED_BOTH) != 0 &&
+                    (e.getNewState() & Frame.MAXIMIZED_BOTH) == 0) {
+
+                // Kasih delay dikit biar transisinya halus baru ke tengah
+                SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
+            }
+        });
+
         // ==========================================
         //         [ SIDEBAR MANAJER ]
         // ==========================================
@@ -29,7 +42,7 @@ public class ManagerDashboard extends JFrame {
         sidebar.setBorder(new EmptyBorder(30, 20, 30, 20));
 
         // Logo Aplikasi
-        JLabel lblLogo = new JLabel("WAIFUCHAN");
+        JLabel lblLogo = new JLabel("SOPIA POS");
         lblLogo.setFont(new Font("SansSerif", Font.BOLD, 22));
         lblLogo.setForeground(Color.WHITE);
         lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -66,7 +79,7 @@ public class ManagerDashboard extends JFrame {
         // Panel Card Laporan (Statistik)
         JPanel cardPanel = new JPanel(new GridLayout(1, 3, 25, 0));
         cardPanel.setOpaque(false);
-        cardPanel.setBorder(new EmptyBorder(30, 0, 30, 0));
+        cardPanel.setBorder(new EmptyBorder(30, 0, 10, 0));
 
         // Card Warna-warni ala gambar yang kamu kirim
         cardPanel.add(new ReportCard("Total Omzet", "Rp 12.500.000", new Color(79, 70, 229))); // Indigo
@@ -119,7 +132,7 @@ class ReportCard extends JPanel {
         // Garis warna di samping kiri card biar estetik
         setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 10, 0, 0, color),
-            new EmptyBorder(20, 20, 20, 20)
+            new EmptyBorder(20, 20, 5, 20)
         ));
 
         JLabel lblTitle = new JLabel(title);

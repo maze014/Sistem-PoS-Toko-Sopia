@@ -1,19 +1,34 @@
 package view;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class AdminDashboard extends JFrame {
-    
+
     // Warna tema sesuai gambar
-    Color sidebarColor = new Color(24, 119, 242); // Biru
+    Color sidebarColor = new Color(0, 204, 204); // Biru
     Color bgColor = new Color(240, 242, 245); // Abu-abu muda
-    
+
     public AdminDashboard(String namaUser, String role) {
         setTitle("Sopia POS - Dashboard " + role);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(1000, 600));
+        setResizable(true); // Biar layoutnya gak berantakan kalau di-resize
+
+        this.addWindowStateListener(e -> {
+            // Jika status berubah dari Full Screen ke Normal
+            if ((e.getOldState() & Frame.MAXIMIZED_BOTH) != 0 &&
+                    (e.getNewState() & Frame.MAXIMIZED_BOTH) == 0) {
+
+                // Kasih delay dikit biar transisinya halus baru ke tengah
+                SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
+            }
+        });
 
         // --- SIDEBAR (Kiri) ---
         JPanel sidebar = new JPanel();
@@ -30,17 +45,10 @@ public class AdminDashboard extends JFrame {
 
         // Menu Berdasarkan Role
         addMenu(sidebar, "Dashboard");
-        if (role.equalsIgnoreCase("Admin")) {
-            addMenu(sidebar, "User Management");
-            addMenu(sidebar, "Register Baru"); // Tombol Register khusus Admin
-        } else if (role.equalsIgnoreCase("Kasir")) {
-            addMenu(sidebar, "Transaksi Baru");
-            addMenu(sidebar, "Stok Barang");
-        } else if (role.equalsIgnoreCase("Manajer")) {
-            addMenu(sidebar, "Laporan Transaksi");
-            addMenu(sidebar, "Laporan Stok");
-        }
-        
+        addMenu(sidebar, "User Management");
+        addMenu(sidebar, "Management Barang");
+        addMenu(sidebar, "Register Baru"); // Tombol Register khusus Admin
+
         sidebar.add(Box.createVerticalGlue()); // Dorong logout ke bawah
         addMenu(sidebar, "Logout");
 
@@ -70,10 +78,11 @@ public class AdminDashboard extends JFrame {
         }
 
         content.add(cardPanel, BorderLayout.CENTER);
-        
+
         // Tabel (Simulasi Standard Table Design di gambar)
-        String[] columns = {"ID", "Keterangan", "Waktu", "Status"};
-        Object[][] data = {{"001", "Penjualan Kopi", "10:00", "SUCCESS"}, {"002", "Stok Masuk", "11:30", "PENDING"}};
+        String[] columns = { "ID", "Keterangan", "Waktu", "Status" };
+        Object[][] data = { { "001", "Penjualan Kopi", "10:00", "SUCCESS" },
+                { "002", "Stok Masuk", "11:30", "PENDING" } };
         JTable table = new JTable(data, columns);
         content.add(new JScrollPane(table), BorderLayout.SOUTH);
 
@@ -102,18 +111,18 @@ class StatCard extends JPanel {
         setBackground(color);
         setPreferredSize(new Dimension(200, 120));
         setBorder(new EmptyBorder(15, 15, 15, 15));
-        
+
         JLabel lblTitle = new JLabel(title);
         lblTitle.setForeground(Color.WHITE);
-        
+
         JLabel lblVal = new JLabel(value);
         lblVal.setFont(new Font("SansSerif", Font.BOLD, 22));
         lblVal.setForeground(Color.WHITE);
-        
+
         add(lblTitle, BorderLayout.NORTH);
         add(lblVal, BorderLayout.CENTER);
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
