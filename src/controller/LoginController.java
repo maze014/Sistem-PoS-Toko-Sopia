@@ -14,7 +14,6 @@ public class LoginController {
             String user = loginView.txtUsername.getText();
             String pass = new String(loginView.txtPassword.getPassword());
             String hashPass = HashUtil.hashSHA256(pass);
-            String roleTerpilih = loginView.cbRole.getSelectedItem().toString(); // Ambil pilihan dropdown
 
             try {
                 Connection conn = config.DBConfig.getConnection();
@@ -25,22 +24,25 @@ public class LoginController {
                 }
 
                 // Query dicek semua biar aman
-                String sql = "SELECT nama_depan, username, password, role FROM user WHERE username=? AND password=? AND role=?";
+                String sql = "SELECT nama_depan, username, password, role FROM user WHERE username=? AND password=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, user);
                 ps.setString(2, hashPass);
-                ps.setString(3, roleTerpilih);
 
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
                     String nama = rs.getString("nama_depan");
+                    String role = rs.getString("role");
 
-                    JOptionPane.showMessageDialog(loginView, "Login Berhasil sebagai " + roleTerpilih);
-                    new DashboardView(rs.getString("nama_depan"), rs.getString("role")).setVisible(true);
+                    if (role.equalsIgnoreCase("Admin")) {
+                        new AdminDashboard(nama, role).setVisible(true);
+                    } else if (role.equalsIgnoreCase("Manajer")) {
+                        new ManagerDashboard(nama).setVisible(true);
+                    } else {
+                        new KasirDashboard(nama).setVisible(true);
+                    }
                     loginView.dispose();
-                    // Kirim nama dan role ke Dashboard agar menu bisa dibatasi
-                    new DashboardView(nama, roleTerpilih).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(loginView, "Username/Password/Role Salah!");
                 }
