@@ -2,6 +2,9 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import controller.RegisterController;
+
 import java.awt.*;
 
 public class AdminDashboard extends JFrame {
@@ -9,6 +12,7 @@ public class AdminDashboard extends JFrame {
     // Warna tema sesuai gambar
     Color sidebarColor = new Color(0, 204, 204); // Biru
     Color bgColor = new Color(240, 242, 245); // Abu-abu muda
+    public JButton btnDashboard, btnUserManage, btnManageBarang, btnRegisterBaru, btnLogout; 
 
     public AdminDashboard(String namaUser, String role) {
         setTitle("Sopia POS - Dashboard " + role);
@@ -43,14 +47,25 @@ public class AdminDashboard extends JFrame {
         sidebar.add(lblLogo);
         sidebar.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        // Menu Berdasarkan Role
-        addMenu(sidebar, "Dashboard");
-        addMenu(sidebar, "User Management");
-        addMenu(sidebar, "Management Barang");
-        addMenu(sidebar, "Register Baru"); // Tombol Register khusus Admin
+        btnDashboard = addMenu(sidebar, "Dashboard");
+        btnUserManage = addMenu(sidebar, "User Management");
+        btnManageBarang = addMenu(sidebar, "Management Barang");
+        btnRegisterBaru = addMenu(sidebar, "Register Baru");
+
+        btnRegisterBaru.addActionListener(e -> {
+            // 1. Panggil View-nya
+            RegisterView regView = new RegisterView(this);
+
+            // 2. Tembakkan ke Controller agar tombolnya berfungsi
+            new RegisterController(regView);
+
+            // 3. Tampilkan
+            regView.setVisible(true);
+        });
+        
 
         sidebar.add(Box.createVerticalGlue()); // Dorong logout ke bawah
-        addMenu(sidebar, "Logout");
+        btnLogout = addMenu(sidebar, "Logout");
 
         // --- MAIN CONTENT (Kanan) ---
         JPanel content = new JPanel(new BorderLayout());
@@ -90,7 +105,7 @@ public class AdminDashboard extends JFrame {
         add(content, BorderLayout.CENTER);
     }
 
-    private void addMenu(JPanel panel, String text) {
+    private JButton addMenu(JPanel panel, String text) {
         JButton btn = new JButton(text);
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btn.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -101,6 +116,8 @@ public class AdminDashboard extends JFrame {
         btn.setFont(new Font("SansSerif", Font.PLAIN, 16));
         panel.add(btn);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        return btn;
     }
 }
 

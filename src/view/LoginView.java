@@ -73,14 +73,13 @@ public class LoginView extends JFrame {
     private JPanel panelKiri, panelKanan;
     public JTextField txtUsername;
     public JPasswordField txtPassword;
-    String[] roles = { "Admin", "Kasir", "Manajer" };
     public JComboBox<String> cbRole;
     public JButton btnLogin;
     private JLabel lblLogoAnimasi;
 
     // Warna tema ala WaifuChan
     private Color warnaUngu = new Color(126, 34, 206); // #7e22ce
-    private Color warnaBackground = new Color(249, 250, 251); // #f9fafb
+    private Color warnaBackground = new Color(255, 255, 255); // #f9fafb
 
     public LoginView() {
         // --- 1. Setting Frame Utama ---
