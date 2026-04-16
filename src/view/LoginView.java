@@ -6,66 +6,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
-import javax.swing.border.AbstractBorder;
-import java.awt.geom.RoundRectangle2D;
-
-class RoundedButton extends JButton {
-    private int radius;
-
-    public RoundedButton(String label, int radius) {
-        super(label);
-        this.radius = radius;
-        setContentAreaFilled(false); // Biar background bawaan Java gak muncul
-        setFocusPainted(false);
-        setBorderPainted(false);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Warna saat ditekan vs warna biasa
-        if (getModel().isArmed()) {
-            g2.setColor(getBackground().darker());
-        } else {
-            g2.setColor(getBackground());
-        }
-
-        // Gambar background bulat
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
-
-        super.paintComponent(g);
-        g2.dispose();
-    }
-}
-
-class RoundedBorder extends AbstractBorder {
-    private int radius;
-    private Color color;
-
-    RoundedBorder(int radius, Color color) {
-        this.radius = radius;
-        this.color = color;
-    }
-
-    @Override
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(color);
-        // Menggambar garis tepi melengkung
-        g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
-        g2d.dispose();
-    }
-
-    @Override
-    public Insets getBorderInsets(Component c) {
-        // Kasih padding dalam biar teks gak nempel ke lengkungan (Top, Left, Bottom,
-        // Right)
-        return new Insets(10, 15, 10, 15);
-    }
-}
+import utils.RoundedButton;
+import utils.RoundedBorder;
 
 public class LoginView extends JFrame {
 

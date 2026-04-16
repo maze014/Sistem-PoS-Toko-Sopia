@@ -3,7 +3,8 @@ package controller;
 import view.*;
 import java.sql.*;
 import javax.swing.JOptionPane;
-import config.HashUtil;
+
+import utils.HashUtil;
 
 public class LoginController {
     private LoginView loginView;

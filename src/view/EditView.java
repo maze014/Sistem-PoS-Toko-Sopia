@@ -10,7 +10,7 @@ import java.net.URL;
 import utils.RoundedBorder;
 import utils.RoundedButton;
 
-public class RegisterView extends JDialog {
+public class EditView extends JDialog {
 
     // Komponen Form
     public JTextField txtNamaDepan, txtNamaBelakang, txtUsername;
@@ -20,11 +20,11 @@ public class RegisterView extends JDialog {
     String[] roles = { "Admin", "Kasir", "Manajer" };
 
     // Warna Tema (Konsisten dengan LoginView)
-    private Color warnaUngu = new Color(126, 34, 206);
+    private Color warnaOrange = new Color(255, 128, 0);
     private Color warnaBackground = new Color(255, 255, 255);
 
-    public RegisterView(Frame parent) {
-        super(parent, "Register User Baru - Sopia POS", true);
+    public EditView(Frame parent) {
+        super(parent, "Edit User - Sopia POS", true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(900, 600);
         setLocationRelativeTo(parent);
@@ -45,7 +45,7 @@ public class RegisterView extends JDialog {
 
         // Header
         gbc.gridy = 0;
-        JLabel lblTitle = new JLabel("Register User");
+        JLabel lblTitle = new JLabel("Edit User");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
         panelKiri.add(lblTitle, gbc);
 
@@ -86,7 +86,7 @@ public class RegisterView extends JDialog {
         gbc.gridy = 9;
         cbRole = new JComboBox<>(roles);
         cbRole.setPreferredSize(new Dimension(0, 40)); // Samain tingginya sama textfield
-        cbRole.setBorder(new RoundedBorder(15, warnaUngu));
+        cbRole.setBorder(new RoundedBorder(15, warnaOrange));
         cbRole.setOpaque(false); // Wajib false biar ujungnya beneran transparan
         cbRole.setBackground(new Color(0, 0, 0, 0));
         cbRole.putClientProperty("JComponent.outline", null);
@@ -96,18 +96,18 @@ public class RegisterView extends JDialog {
 
         // Tombol Aksi
         gbc.gridy = 10;
-        btnSimpan = new RoundedButton("Register", 30); // 30 adalah tingkat kebulatannya
+        btnSimpan = new RoundedButton("Edit User", 30); // 30 adalah tingkat kebulatannya
         btnSimpan.setFont(new Font("SansSerif", Font.BOLD, 16));
         btnSimpan.setForeground(Color.WHITE);
-        btnSimpan.setBackground(warnaUngu);
+        btnSimpan.setBackground(warnaOrange);
         // Efek Hover Tombol
         btnSimpan.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                btnSimpan.setBackground(warnaUngu.darker());
+                btnSimpan.setBackground(warnaOrange.darker());
             }
 
             public void mouseExited(MouseEvent e) {
-                btnSimpan.setBackground(warnaUngu);
+                btnSimpan.setBackground(warnaOrange);
             }
         });
         panelKiri.add(btnSimpan, gbc);

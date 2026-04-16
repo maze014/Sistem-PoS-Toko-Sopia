@@ -1,6 +1,6 @@
 package controller;
 
-import view.RegisterView;
+import view.EditView;
 import model.User;
 import utils.HashUtil;
 import config.DBConfig;
@@ -10,15 +10,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RegisterController {
-    private RegisterView view;
+public class EditController {
+    private EditView view;
+    private String usernameLama; // Simpan username lama untuk query UPDATE
 
-    public RegisterController(RegisterView view) {
+    public EditController(EditView view, String usernameLama) {
         this.view = view;
 
         // Pasang listener ke tombol simpan di View
         this.view.btnSimpan.addActionListener(e -> simpanUser());
-
+        this.usernameLama = usernameLama; // Simpan username lama yang dikirim dari UserManagementController
     }
 
     private void simpanUser() {
@@ -56,11 +57,12 @@ public class RegisterController {
         String passHashed = HashUtil.hashSHA256(pass);
 
         // 4. Bungkus ke Model User
-        User userBaru = new User(namaD, namaB, user, passHashed, role);
+        User userBaru = new User(namaD, namaB, user, passHashed, role);  
 
         // 5. Eksekusi ke Database
         try (Connection conn = DBConfig.getConnection()) {
-            String sql = "INSERT INTO user (nama_depan, nama_belakang, username, password, role) VALUES (?, ?, ?, ?, ?)";
+            //System.out.println("Username Lama: " + usernameLama); // Debug: Pastikan username lama benar
+            String sql = "UPDATE user SET nama_depan = ?, nama_belakang = ?, username = ?, password = ?, role = ? WHERE username= ?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, userBaru.getNamaDepan());
@@ -68,11 +70,12 @@ public class RegisterController {
             ps.setString(3, userBaru.getUsername());
             ps.setString(4, userBaru.getPassword());
             ps.setString(5, userBaru.getRole());
+            ps.setString(6, usernameLama);
 
             int hasil = ps.executeUpdate();
 
             if (hasil > 0) {
-                JOptionPane.showMessageDialog(view, "User baru berhasil didaftarkan!");
+                JOptionPane.showMessageDialog(view, "User berhasil diedit!");
                 view.dispose(); // Tutup form setelah sukses
             }
         } catch (SQLException e) {

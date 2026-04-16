@@ -2,18 +2,18 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import controller.RegisterController;
+import controller.AdminController;
+import controller.LoginController;
 
 import java.awt.*;
 
 public class AdminDashboard extends JFrame {
-
     // Warna tema sesuai gambar
     Color sidebarColor = new Color(0, 204, 204); // Biru
-    Color bgColor = new Color(240, 242, 245); // Abu-abu muda
-    public JButton btnDashboard, btnUserManage, btnManageBarang, btnRegisterBaru, btnLogout; 
-
+    Color bgColor = new Color(255, 255, 255); // Abu-abu muda
+    public JButton btnDashboard, btnUserManage, btnManageBarang, btnLogout;
+    JPanel content = new JPanel(new BorderLayout());
+    
     public AdminDashboard(String namaUser, String role) {
         setTitle("Sopia POS - Dashboard " + role);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -50,25 +50,21 @@ public class AdminDashboard extends JFrame {
         btnDashboard = addMenu(sidebar, "Dashboard");
         btnUserManage = addMenu(sidebar, "User Management");
         btnManageBarang = addMenu(sidebar, "Management Barang");
-        btnRegisterBaru = addMenu(sidebar, "Register Baru");
 
-        btnRegisterBaru.addActionListener(e -> {
-            // 1. Panggil View-nya
-            RegisterView regView = new RegisterView(this);
-
-            // 2. Tembakkan ke Controller agar tombolnya berfungsi
-            new RegisterController(regView);
-
-            // 3. Tampilkan
-            regView.setVisible(true);
+        btnUserManage.addActionListener(e -> {
+            new AdminController(this);
         });
-        
 
         sidebar.add(Box.createVerticalGlue()); // Dorong logout ke bawah
         btnLogout = addMenu(sidebar, "Logout");
+        btnLogout.addActionListener(e -> {
+            this.dispose();
+            LoginView loginBaru = new LoginView();
+            new LoginController(loginBaru);
+            loginBaru.setVisible(true);
+        });
 
         // --- MAIN CONTENT (Kanan) ---
-        JPanel content = new JPanel(new BorderLayout());
         content.setBackground(bgColor);
         content.setBorder(new EmptyBorder(30, 30, 30, 30));
 
@@ -103,6 +99,22 @@ public class AdminDashboard extends JFrame {
 
         add(sidebar, BorderLayout.WEST);
         add(content, BorderLayout.CENTER);
+    }
+
+    public void tampilkanHalaman(JPanel panelBaru) {
+        // 1. Sapu bersih semua isi panel kanan yang lama
+        content.removeAll();
+
+        // 2. Pastikan layoutnya BorderLayout biar panel baru langsung full screen di
+        // kanan
+        content.setLayout(new BorderLayout());
+
+        // 3. Masukkan panel yang baru ke tengah-tengah
+        content.add(panelBaru, BorderLayout.CENTER);
+
+        // 4. KUNCI UTAMA: Beri tahu Java buat nge-refresh layar!
+        content.revalidate(); // Update susunan komponen
+        content.repaint(); // Gambar ulang warnanya
     }
 
     private JButton addMenu(JPanel panel, String text) {

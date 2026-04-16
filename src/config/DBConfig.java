@@ -2,18 +2,14 @@ package config;
 import java.sql.*;
 
 public class DBConfig {
-    private static Connection conn;
-    public static Connection getConnection() {
-        if (conn == null) {
-            try {
-                String url = "jdbc:mysql://localhost:3307/db_toko_sopia"; // Sesuaikan port
-                String user = "root";
-                String pass = "";
-                conn = DriverManager.getConnection(url, user, pass);
-            } catch (SQLException e) {
-                System.out.println("Koneksi Gagal: " + e.getMessage());
-            }
-        }
-        return conn;
+    // Fungsi ini WAJIB mencetak koneksi BARU setiap kali dipanggil
+    public static Connection getConnection() throws SQLException {
+        // Sesuaikan nama database, user, dan password kamu
+        String url = "jdbc:mysql://localhost:3307/db_toko_sopia"; 
+        String user = "root";
+        String pass = "";
+        
+        // DriverManager.getConnection otomatis membuat jalur baru ke database
+        return DriverManager.getConnection(url, user, pass);
     }
 }
