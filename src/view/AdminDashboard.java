@@ -13,7 +13,7 @@ public class AdminDashboard extends JFrame {
     Color bgColor = new Color(255, 255, 255); // Abu-abu muda
     public JButton btnDashboard, btnUserManage, btnManageBarang, btnLogout;
     JPanel content = new JPanel(new BorderLayout());
-    
+
     public AdminDashboard(String namaUser, String role) {
         setTitle("Sopia POS - Dashboard " + role);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -37,9 +37,9 @@ public class AdminDashboard extends JFrame {
         // --- SIDEBAR (Kiri) ---
         JPanel sidebar = new JPanel();
         sidebar.setBackground(sidebarColor);
-        sidebar.setPreferredSize(new Dimension(250, 0));
+        sidebar.setPreferredSize(new Dimension(260, 0));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBorder(new EmptyBorder(20, 15, 20, 15));
+        sidebar.setBorder(new EmptyBorder(30, 20, 30, 20));
 
         JLabel lblLogo = new JLabel("SOPIA POS");
         lblLogo.setForeground(Color.WHITE);
@@ -51,9 +51,7 @@ public class AdminDashboard extends JFrame {
         btnUserManage = addMenu(sidebar, "User Management");
         btnManageBarang = addMenu(sidebar, "Management Barang");
 
-        btnUserManage.addActionListener(e -> {
-            new AdminController(this);
-        });
+        new AdminController(this);
 
         sidebar.add(Box.createVerticalGlue()); // Dorong logout ke bawah
         btnLogout = addMenu(sidebar, "Logout");
