@@ -7,6 +7,8 @@ import utils.RoundedBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import view.FormBarangView;
+import view.EditBarangView;
 
 public class BarangManagementController {
     private BarangManagementView view;
@@ -17,9 +19,10 @@ public class BarangManagementController {
 
         view.btnTambah.addActionListener(e -> {
             // Nanti panggil Pop-up Form Barang di sini
-            // FormBarangView form = new FormBarangView(...);
-            // form.setVisible(true);
-            // refreshData();
+            FormBarangView form = new FormBarangView((JFrame) SwingUtilities.getWindowAncestor(view));
+            new FormBarangController(form);
+            form.setVisible(true);
+            refreshData();
         });
     }
 
@@ -113,28 +116,30 @@ public class BarangManagementController {
         btnDelete.setForeground(Color.RED);
 
          // --- Logika Tombol Edit (Khusus user ini) ---
-        // btnEdit.addActionListener(e -> {
-        //     EditView editPopUp = new EditView((JFrame) SwingUtilities.getWindowAncestor(view));
-        //     editPopUp.setTitle("Edit Barang: " + b.getNamaBarang());
+        btnEdit.addActionListener(e -> {
+            EditBarangView editPopUp = new EditBarangView((JFrame) SwingUtilities.getWindowAncestor(view));
+            editPopUp.setTitle("Edit Barang: " + b.getNamaBarang());
 
-        //     // ==========================================
-        //     // 1. TEMBAKKAN DATA LAMA KE DALAM FORM
-        //     // ==========================================
-        //     editPopUp.txtNamaDepan.setText(b.getNamaDepan());
-        //     editPopUp.txtNamaDepan.setForeground(Color.BLACK);
-        //     editPopUp.txtNamaBelakang.setText(u.getNamaBelakang());
-        //     editPopUp.txtNamaBelakang.setForeground(Color.BLACK);
-        //     editPopUp.txtUsername.setText(u.getUsername());
-        //     editPopUp.txtUsername.setForeground(Color.BLACK);
-        //     editPopUp.cbRole.setSelectedItem(u.getRole());
+            // ==========================================
+            // 1. TEMBAKKAN DATA LAMA KE DALAM FORM
+            // ==========================================
+            editPopUp.txtNamaBarang.setText(b.getNamaBarang());
+            editPopUp.txtNamaBarang.setForeground(Color.BLACK);
+            editPopUp.txtHarga.setText(String.valueOf(b.getHarga()));
+            editPopUp.txtHarga.setForeground(Color.BLACK);
+            editPopUp.txtStok.setText(String.valueOf(b.getStok()));
+            editPopUp.txtStok.setForeground(Color.BLACK);
+            editPopUp.cbKategori.setSelectedItem(b.getTanggalKadaluarsa());
+            editPopUp.txtKadaluarsa.setText(String.valueOf(b.getTanggalKadaluarsa()));
+            editPopUp.txtKadaluarsa.setForeground(Color.BLACK);
 
-        //     // 3. Pasang Otaknya
-        //     new EditController(editPopUp, u.getUsername()); // Kirim username lama ke controller
-        //     editPopUp.setVisible(true);
+            // 3. Pasang Otaknya
+            new EditBarangController(editPopUp, b.getIdBarang()); // Kirim username lama ke controller
+            editPopUp.setVisible(true);
 
-        //     // 4. Refresh data setelah beres ngedit
-        //     refreshData();
-        // });
+            // 4. Refresh data setelah beres ngedit
+            refreshData();
+        });
         // --- Logika Tombol Delete (Khusus user ini) ---
         btnDelete.addActionListener(e -> {
             int konfirmasi = JOptionPane.showConfirmDialog(view,
