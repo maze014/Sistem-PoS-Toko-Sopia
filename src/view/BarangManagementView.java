@@ -11,7 +11,7 @@ public class BarangManagementView extends JPanel {
     public BarangManagementView() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Header & Tombol Tambah
         JPanel headerPanel = new JPanel(new BorderLayout());

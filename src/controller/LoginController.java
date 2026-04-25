@@ -37,9 +37,9 @@ public class LoginController {
                     String role = rs.getString("role");
 
                     if (role.equalsIgnoreCase("Admin")) {
-                        new AdminDashboard(nama, role).setVisible(true);
+                        new AdminView(nama, role).setVisible(true);
                     } else if (role.equalsIgnoreCase("Manajer")) {
-                        new ManagerDashboard(nama).setVisible(true);
+                        new ManajerView(nama).setVisible(true);
                     } else {
                         new KasirDashboard(nama).setVisible(true);
                     }
