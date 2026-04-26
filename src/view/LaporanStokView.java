@@ -21,7 +21,7 @@ public class LaporanStokView extends JPanel {
         panelKartu.setOpaque(false);
         panelKartu.setPreferredSize(new Dimension(0, 130));
 
-        cardTotalBarang = buatKartu("Total Semua Barang", lblAngkaTotal = new JLabel("0"));
+        cardTotalBarang = buatKartu("Total Semua Stok Barang", lblAngkaTotal = new JLabel("0"));
         cardStokTipis = buatKartu("Stok Kritis (< 10)", lblAngkaTipis = new JLabel("0"));
         cardKategori = buatKartu("Jumlah Kategori", lblAngkaKategori = new JLabel("0"));
 

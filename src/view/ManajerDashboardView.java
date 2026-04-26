@@ -22,7 +22,7 @@ public class ManajerDashboardView extends JPanel {
         panelKartu.setPreferredSize(new Dimension(0, 130));
 
         cardOmzet = buatKartu("Omzet Bulan Ini", lblAngkaOmzet = new JLabel("Rp 0"));
-        cardTransaksi = buatKartu("Total Transaksi", lblAngkaTransaksi = new JLabel("0"));
+        cardTransaksi = buatKartu("Total Transaksi Bulan Ini", lblAngkaTransaksi = new JLabel("0"));
         cardStok = buatKartu("Stok Menipis", lblAngkaStok = new JLabel("0"));
 
         panelKartu.add(cardOmzet);
