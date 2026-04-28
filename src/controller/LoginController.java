@@ -25,7 +25,7 @@ public class LoginController {
                 }
 
                 // Query dicek semua biar aman
-                String sql = "SELECT nama_depan, username, password, role FROM user WHERE username=? AND password=?";
+                String sql = "SELECT id_user, nama_depan, username, password, role FROM user WHERE username=? AND password=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, user);
                 ps.setString(2, hashPass);
@@ -33,15 +33,17 @@ public class LoginController {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
+                    String idUserString = rs.getString("id_user");
                     String nama = rs.getString("nama_depan");
                     String role = rs.getString("role");
+                    int idUser = Integer.parseInt(idUserString);
 
                     if (role.equalsIgnoreCase("Admin")) {
                         new AdminView(nama, role).setVisible(true);
                     } else if (role.equalsIgnoreCase("Manajer")) {
                         new ManajerView(nama).setVisible(true);
                     } else {
-                        new KasirDashboard(nama).setVisible(true);
+                        new KasirView(nama, idUser).setVisible(true);
                     }
                     loginView.dispose();
                 } else {
