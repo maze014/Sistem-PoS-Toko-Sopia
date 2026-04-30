@@ -12,17 +12,15 @@ public class RiwayatKasirView extends JPanel {
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // --- HEADER ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
         JLabel lblTitle = new JLabel("Riwayat Penjualan");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
-        lblTitle.setForeground(new Color(13, 148, 136)); // Hijau khas Kasir
+        lblTitle.setForeground(new Color(13, 148, 136)); 
 
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         headerPanel.add(lblTitle, BorderLayout.WEST);
 
-        // --- WADAH CARD RIWAYAT ---
         panelDaftarRiwayat = new JPanel();
         panelDaftarRiwayat.setLayout(new BoxLayout(panelDaftarRiwayat, BoxLayout.Y_AXIS));
         panelDaftarRiwayat.setBackground(Color.WHITE);
@@ -32,7 +30,6 @@ public class RiwayatKasirView extends JPanel {
         scrollPane.getViewport().setBackground(Color.WHITE);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        // Jurus Bayangan: Scrollbar tetap jalan, tapi ukurannya 0 (tak terlihat)
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
 
@@ -40,23 +37,19 @@ public class RiwayatKasirView extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    // --- HELPER BIKIN CARD MELENGKUNG ---
     public JPanel buatCard(int id, String tanggal, String total, RoundedButton btnCetak) {
-        // Wadah luar transparan buat ngasih jarak/margin antar card
         JPanel cardWrapper = new JPanel(new BorderLayout());
         cardWrapper.setOpaque(false);
-        cardWrapper.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // Margin luar
+        cardWrapper.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); 
         cardWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 85));
 
-        // PAKAI KELAS CUSTOM: RoundedCardPanel dengan lengkungan 20
         RoundedCardPanel card = new RoundedCardPanel(20);
         card.setLayout(new BorderLayout(15, 0));
-        card.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding dalam
+        card.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Info Kiri (ID, Tanggal, Total)
         JPanel info = new JPanel(new GridLayout(2, 1));
         info.setOpaque(false);
-        JLabel lblId = new JLabel("ID Transaksi: #" + id + " | " + tanggal);
+        JLabel lblId = new JLabel("ID Transaksi: " + id + " | " + tanggal);
         lblId.setFont(new Font("SansSerif", Font.PLAIN, 13));
         lblId.setForeground(Color.GRAY);
 
@@ -67,7 +60,6 @@ public class RiwayatKasirView extends JPanel {
         info.add(lblId);
         info.add(lblTotal);
 
-        // Kanan (Tombol Cetak)
         JPanel panelTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 8));
         panelTombol.setOpaque(false);
 
@@ -80,38 +72,27 @@ public class RiwayatKasirView extends JPanel {
 
         card.add(info, BorderLayout.CENTER);
         card.add(panelTombol, BorderLayout.EAST);
-
-        // Masukkan card melengkung ke wadah luarnya
         cardWrapper.add(card, BorderLayout.CENTER);
 
         return cardWrapper;
     }
 
-    // ==========================================
-    // INNER CLASS: BIKIN PANEL BISA MELENGKUNG
-    // ==========================================
     class RoundedCardPanel extends JPanel {
         private int radius;
 
         public RoundedCardPanel(int radius) {
             this.radius = radius;
-            setOpaque(false); // Wajib false biar ujung kotaknya gak kelihatan
+            setOpaque(false);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
-            // Anti-aliasing biar garis lengkungnya mulus, gak patah-patah/pixelated
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Gambar Background Kartu (Putih)
             g2.setColor(Color.WHITE);
             g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
-
-            // Gambar Garis Tepi/Border Kartu (Abu-abu tipis)
             g2.setColor(new Color(220, 220, 220));
             g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
-
             g2.dispose();
             super.paintComponent(g);
         }

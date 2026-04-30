@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class RiwayatKasirModel {
-    
-    // Ambil daftar transaksi buat jadi Card
     public static List<Map<String, Object>> getDataRiwayat(int idKasir) {
         List<Map<String, Object>> listData = new ArrayList<>();
         String sql = "SELECT id_transaksi, tanggal, total_pembayaran FROM transaksi " +
@@ -30,7 +28,6 @@ public class RiwayatKasirModel {
         return listData;
     }
 
-    // Fungsi khusus buat ambil detail barang saat cetak struk
     public static String getDetailStruk(int idTrx) {
         StringBuilder struk = new StringBuilder();
         String sql = "SELECT b.nama_barang, dt.jumlah_barang, b.harga " +

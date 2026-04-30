@@ -48,8 +48,6 @@ public class EditBarangController {
 
             java.sql.Date tglKadaluarsa = java.sql.Date.valueOf(tgl);
 
-            // Panggil fungsi insert di Model Barang
-            // Pastikan kamu sudah buat fungsi 'insertBarang' di model Barang ya Wak!
             boolean sukses = BarangManagement.updateBarang(kat.getIdKategori(), nama, harga, stok, tglKadaluarsa, idBarangLama);
 
             if (sukses) {

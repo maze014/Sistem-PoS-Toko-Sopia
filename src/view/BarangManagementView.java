@@ -13,7 +13,6 @@ public class BarangManagementView extends JPanel {
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Header & Tombol Tambah
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
         JLabel lblTitle = new JLabel("Manajemen Barang");
@@ -22,7 +21,7 @@ public class BarangManagementView extends JPanel {
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         
         btnTambah = new RoundedButton("Tambah Barang Baru", 15);
-        btnTambah.setBackground(new Color(138, 43, 226)); // Ungu Sopia
+        btnTambah.setBackground(new Color(138, 43, 226));
         btnTambah.setForeground(Color.WHITE);
         btnTambah.setFont(new Font("SansSerif", Font.BOLD, 14));
         btnTambah.setPreferredSize(new Dimension(180, 30));
@@ -30,7 +29,6 @@ public class BarangManagementView extends JPanel {
         headerPanel.add(lblTitle, BorderLayout.WEST);
         headerPanel.add(btnTambah, BorderLayout.EAST);
 
-        // Wadah Card Barang
         panelDaftarBarang = new JPanel();
         panelDaftarBarang.setLayout(new BoxLayout(panelDaftarBarang, BoxLayout.Y_AXIS));
         panelDaftarBarang.setBackground(Color.WHITE);
@@ -41,7 +39,6 @@ public class BarangManagementView extends JPanel {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         add(headerPanel, BorderLayout.NORTH);
-        // Biar ada jarak dikit antara judul dan list
         add(scrollPane, BorderLayout.CENTER);
     }
 }

@@ -9,7 +9,6 @@ public class StokBarangModel {
     public static List<Object[]> cariBarang(String keyword) {
         List<Object[]> dataBarang = new ArrayList<>();
         
-        // Cari berdasarkan nama barang ATAU ID barang
         String sql = "SELECT id_barang, nama_barang, stok, harga FROM barang " +
                      "WHERE nama_barang LIKE ? ORDER BY nama_barang ASC LIMIT 100";
                      

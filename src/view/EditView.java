@@ -11,15 +11,12 @@ import utils.RoundedBorder;
 import utils.RoundedButton;
 
 public class EditView extends JDialog {
-
-    // Komponen Form
     public JTextField txtNamaDepan, txtNamaBelakang, txtUsername;
     public JPasswordField txtPassword;
     public JComboBox<String> cbRole;
     public JButton btnSimpan, btnBatal;
-    String[] roles = { "Admin", "Kasir", "Manajer" };
+    String[] roles = { "Admin", "Kasir", "Manajer", "Petugas_Gudang" };
 
-    // Warna Tema (Konsisten dengan LoginView)
     private Color warnaOrange = new Color(255, 128, 0);
     private Color warnaBackground = new Color(255, 255, 255);
 
@@ -31,9 +28,6 @@ public class EditView extends JDialog {
         setResizable(false);
         setLayout(new GridLayout(1, 2));
 
-        // ==========================================
-        // [ SISI KIRI: FORM REGISTER ]
-        // ==========================================
         JPanel panelKiri = new JPanel(new GridBagLayout());
         panelKiri.setBackground(Color.WHITE);
         panelKiri.setBorder(new EmptyBorder(30, 60, 30, 60));
@@ -43,19 +37,14 @@ public class EditView extends JDialog {
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 10, 0);
 
-        // Header
         gbc.gridy = 0;
         JLabel lblTitle = new JLabel("Edit User");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
         panelKiri.add(lblTitle, gbc);
 
         gbc.gridy = 1;
-
-        // --- Input Fields ---
         gbc.insets = new Insets(10, 0, 5, 0);
         panelKiri.add(createLabelForm("Nama Lengkap"), gbc);
-
-        // Baris Nama (Depan & Belakang)
         gbc.gridy = 2;
         JPanel panelNama = new JPanel(new GridLayout(1, 2, 10, 0));
         panelNama.setOpaque(false);
@@ -65,42 +54,35 @@ public class EditView extends JDialog {
         panelNama.add(txtNamaBelakang);
         gbc.gridy = 3;
         panelKiri.add(panelNama, gbc);
-
-        // Username
         gbc.gridy = 4;
         panelKiri.add(createLabelForm("Username"), gbc);
         gbc.gridy = 5;
         txtUsername = createTextField("Masukkan username unik");
         panelKiri.add(txtUsername, gbc);
-
-        // Password
         gbc.gridy = 6;
         panelKiri.add(createLabelForm("Password"), gbc);
         gbc.gridy = 7;
         txtPassword = createPasswordField("Masukkan password");
         panelKiri.add(txtPassword, gbc);
-
-        // Role
         gbc.gridy = 8;
         panelKiri.add(createLabelForm("Posisi"), gbc);
         gbc.gridy = 9;
         cbRole = new JComboBox<>(roles);
-        cbRole.setPreferredSize(new Dimension(0, 40)); // Samain tingginya sama textfield
+        cbRole.setPreferredSize(new Dimension(0, 40)); 
         cbRole.setBorder(new RoundedBorder(15, warnaOrange));
-        cbRole.setOpaque(false); // Wajib false biar ujungnya beneran transparan
+        cbRole.setOpaque(false);
         cbRole.setBackground(new Color(0, 0, 0, 0));
         cbRole.putClientProperty("JComponent.outline", null);
         cbRole.putClientProperty("JComboBox.buttonBorder", null);
         cbRole.setFocusable(false);
         panelKiri.add(cbRole, gbc);
 
-        // Tombol Aksi
         gbc.gridy = 10;
-        btnSimpan = new RoundedButton("Edit User", 30); // 30 adalah tingkat kebulatannya
+        btnSimpan = new RoundedButton("Edit User", 30);
         btnSimpan.setFont(new Font("SansSerif", Font.BOLD, 16));
         btnSimpan.setForeground(Color.WHITE);
         btnSimpan.setBackground(warnaOrange);
-        // Efek Hover Tombol
+
         btnSimpan.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 btnSimpan.setBackground(warnaOrange.darker());
@@ -112,9 +94,6 @@ public class EditView extends JDialog {
         });
         panelKiri.add(btnSimpan, gbc);
 
-        // ==========================================
-        // [ SISI KANAN: LOGO ]
-        // ==========================================
         JPanel panelKanan = new JPanel(new GridBagLayout());
         panelKanan.setBackground(warnaBackground);
 
@@ -123,12 +102,9 @@ public class EditView extends JDialog {
             ImageIcon iconLogo = new ImageIcon(imgUrl);
             JLabel lblLogoAnimasi = new JLabel(iconLogo);
 
-            // --- TAMBAHIN 3 BARIS INI WAK ---
             lblLogoAnimasi.setOpaque(false);
             lblLogoAnimasi.setBackground(new Color(0, 0, 0, 0));
-            panelKanan.setOpaque(false); // Pastikan panel tempat naruh gambarnya juga transparan
-            // --------------------------------
-
+            panelKanan.setOpaque(false);
             panelKanan.add(lblLogoAnimasi);
         } else {
             panelKanan.add(new JLabel("LOGO GIF"));
@@ -138,23 +114,20 @@ public class EditView extends JDialog {
         add(panelKanan);
     }
 
-    // --- Helper Methods untuk Styling ---
     private JLabel createLabelForm(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("SansSerif", Font.BOLD, 14));
-        lbl.setForeground(new Color(55, 65, 81)); // #374151
+        lbl.setForeground(new Color(55, 65, 81));
         return lbl;
     }
 
     private JTextField createTextField(String placeholder) {
         JTextField tf = new JTextField();
-        tf.setColumns(10); // Lebar minimum
+        tf.setColumns(10);
         tf.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
         tf.setForeground(Color.GRAY);
         tf.setText(placeholder);
-
-        // Efek Placeholder sederhana
         tf.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (tf.getText().equals(placeholder)) {
@@ -178,9 +151,7 @@ public class EditView extends JDialog {
         pf.setColumns(10);
         pf.setFont(new Font("SansSerif", Font.PLAIN, 14));
         pf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
-
-        // --- LOGIKA PLACEHOLDER ---
-        pf.setEchoChar((char) 0); // Matikan sensor (biar teks placeholder kelihatan)
+        pf.setEchoChar((char) 0);
         pf.setText(placeholder);
         pf.setForeground(Color.GRAY);
 
@@ -190,7 +161,7 @@ public class EditView extends JDialog {
                 String pass = new String(pf.getPassword());
                 if (pass.equals(placeholder)) {
                     pf.setText("");
-                    pf.setEchoChar('•'); // Aktifkan sensor (titik-titik) pas ngetik
+                    pf.setEchoChar('•');
                     pf.setForeground(Color.BLACK);
                 }
             }
@@ -199,7 +170,7 @@ public class EditView extends JDialog {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String pass = new String(pf.getPassword());
                 if (pass.isEmpty()) {
-                    pf.setEchoChar((char) 0); // Matikan sensor lagi
+                    pf.setEchoChar((char) 0);
                     pf.setText(placeholder);
                     pf.setForeground(Color.GRAY);
                 }

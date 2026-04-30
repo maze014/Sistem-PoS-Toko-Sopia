@@ -16,7 +16,6 @@ public class LaporanStokView extends JPanel {
         setBackground(new Color(248, 249, 250));
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // --- HEADER: 3 KAD RINGKASAN STOK ---
         JPanel panelKartu = new JPanel(new GridLayout(1, 3, 20, 0));
         panelKartu.setOpaque(false);
         panelKartu.setPreferredSize(new Dimension(0, 130));
@@ -29,7 +28,6 @@ public class LaporanStokView extends JPanel {
         panelKartu.add(cardStokTipis);
         panelKartu.add(cardKategori);
 
-        // --- TENGAH: WADAH GRAFIK ---
         panelWadahGrafik = new JPanel(new BorderLayout());
         panelWadahGrafik.setBackground(Color.WHITE);
         panelWadahGrafik.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230), 2));

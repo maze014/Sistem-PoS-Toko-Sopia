@@ -10,10 +10,6 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.axis.NumberAxis;
 
 public class AdminDashboardModel {
-
-    // ==========================================
-    // 1. FUNGSI NGAMBIL ANGKA (Return Int)
-    // ==========================================
     public static int getTotalPengguna() {
         try (Connection conn = DBConfig.getConnection();
                 Statement st = conn.createStatement();
@@ -50,9 +46,6 @@ public class AdminDashboardModel {
         return 0;
     }
 
-    // ==========================================
-    // 2. FUNGSI BIKIN GRAFIK (Return JFreeChart)
-    // ==========================================
     public static JFreeChart getGrafikPengguna() {
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         try (Connection conn = DBConfig.getConnection();
@@ -84,8 +77,8 @@ public class AdminDashboardModel {
         JFreeChart chart = ChartFactory.createBarChart("Top 5 Barang Stok Terbanyak", "Nama Barang", "Jumlah Stok", dataset);
     
         CategoryPlot plot = chart.getCategoryPlot();
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis(); // Ambil sumbu Y
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); // Paksa jadi Integer!
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         return chart;
     }
@@ -108,8 +101,8 @@ public class AdminDashboardModel {
                 dataset);
 
         CategoryPlot plot = chart.getCategoryPlot();
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis(); // Ambil sumbu Y
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); // Paksa jadi Integer!
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); 
 
         return chart;
     }

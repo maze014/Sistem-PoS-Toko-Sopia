@@ -15,52 +15,40 @@ public class UserManagementController {
 
     public UserManagementController(UserManagementView view) {
         this.view = view;
-        refreshData(); // Langsung cetak card pas dibuka
+        refreshData();
 
-        // // Tombol Tambah User Baru
         this.view.btnTambah.addActionListener(e -> {
             RegisterView regView = new RegisterView((JFrame) SwingUtilities.getWindowAncestor(view));
             new RegisterController(regView);
             regView.setVisible(true);
-            // Refresh data setelah pop-up tambah user ditutup
             refreshData();
         });
     }
 
-    // Fungsi buat narik data dan nyetak Card
-
     public void refreshData() {
-        view.panelDaftarUser.removeAll(); // Sapu bersih wadahnya dulu
+        view.panelDaftarUser.removeAll();
         List<User> users = UserManagement.getAllUsers();
 
         for (User u : users) {
-            JPanel card = buatCardUser(u); // Bikin 1 card
-            view.panelDaftarUser.add(card); // Masukin ke wadah
-            view.panelDaftarUser.add(Box.createRigidArea(new Dimension(0, 10))); // Kasih jarak antar card
+            JPanel card = buatCardUser(u); 
+            view.panelDaftarUser.add(card); 
+            view.panelDaftarUser.add(Box.createRigidArea(new Dimension(0, 10)));
         }
 
-        // Wajib panggil ini biar layar ter-update
         view.panelDaftarUser.revalidate();
         view.panelDaftarUser.repaint();
     }
 
-    // ==========================================
-    // PABRIK PEMBUAT CARD
-    // ==========================================
     private JPanel buatCardUser(User u) {
-        // 1. Setup Card Utama
         JPanel card = new JPanel(new BorderLayout(15, 0));
         card.setBackground(Color.WHITE);
-        // Pakai border ungu melengkung yang udah kamu bikin kemarin
         card.setBorder(new RoundedBorder(15, new Color(200, 200, 200)));
-        // Biar ukuran tingginya fix, gak gepeng
         card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         card.setBorder(BorderFactory.createCompoundBorder(
                 card.getBorder(),
-                BorderFactory.createEmptyBorder(5, 15, 5, 15) // Padding dalam card
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
         ));
 
-        // 2. Info Kiri (Nama & Role)
         JPanel infoPanel = new JPanel(new GridLayout(2, 1));
         infoPanel.setOpaque(false);
 
@@ -73,7 +61,6 @@ public class UserManagementController {
         infoPanel.add(lblNama);
         infoPanel.add(lblRole);
 
-        // 3. Tombol Kanan (Edit & Delete)
         JPanel aksiPanel = new JPanel(new GridBagLayout());
         aksiPanel.setOpaque(false);
 
@@ -84,14 +71,9 @@ public class UserManagementController {
         JButton btnDelete = new JButton("Hapus");
         btnDelete.setForeground(Color.RED);
 
-        // --- Logika Tombol Edit (Khusus user ini) ---
         btnEdit.addActionListener(e -> {
             EditView editPopUp = new EditView((JFrame) SwingUtilities.getWindowAncestor(view));
             editPopUp.setTitle("Edit User: " + u.getUsername());
-
-            // ==========================================
-            // 1. TEMBAKKAN DATA LAMA KE DALAM FORM
-            // ==========================================
             editPopUp.txtNamaDepan.setText(u.getNamaDepan());
             editPopUp.txtNamaDepan.setForeground(Color.BLACK);
             editPopUp.txtNamaBelakang.setText(u.getNamaBelakang());
@@ -100,14 +82,11 @@ public class UserManagementController {
             editPopUp.txtUsername.setForeground(Color.BLACK);
             editPopUp.cbRole.setSelectedItem(u.getRole());
 
-            // 3. Pasang Otaknya
-            new EditController(editPopUp, u.getUsername()); // Kirim username lama ke controller
+            new EditController(editPopUp, u.getUsername());
             editPopUp.setVisible(true);
-
-            // 4. Refresh data setelah beres ngedit
             refreshData();
         });
-        // --- Logika Tombol Delete (Khusus user ini) ---
+    
         btnDelete.addActionListener(e -> {
             int konfirmasi = JOptionPane.showConfirmDialog(view,
                     "Yakin mau hapus user " + u.getNamaDepan() + "?",
@@ -116,13 +95,11 @@ public class UserManagementController {
             if (konfirmasi == JOptionPane.YES_OPTION) {
                 boolean berhasil = UserManagement.deleteUser(u.getUsername());
 
-                // 2. CEK HASILNYA
                 if (berhasil) {
                     JOptionPane.showMessageDialog(view,
                             "User " + u.getUsername() + " berhasil dimusnahkan!",
                             "Sukses", JOptionPane.INFORMATION_MESSAGE);
 
-                    // 3. REFRESH LAYAR (Biar card-nya langsung hilang)
                     refreshData();
                 } else {
                     JOptionPane.showMessageDialog(view,
@@ -137,7 +114,6 @@ public class UserManagementController {
 
         aksiPanel.add(wadahTombol);
 
-        // 4. Gabungkan ke Card
         card.add(infoPanel, BorderLayout.CENTER);
         card.add(aksiPanel, BorderLayout.EAST);
 

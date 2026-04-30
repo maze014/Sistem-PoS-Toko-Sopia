@@ -31,6 +31,7 @@ public class FormBarangController {
         Kategori kat = (Kategori) view.cbKategori.getSelectedItem();
         String tgl = view.txtKadaluarsa.getText();
 
+        // validasi inputan kosong
         if (nama.isEmpty() || nama.equals("Contoh: Keripik Singkong Pedas") || hargaString.isEmpty()
                 || hargaString.equals("NMisal: 5000")
                 || stokString.isEmpty() || stokString.equals("Misal: 50") || tgl.isEmpty()
@@ -46,8 +47,6 @@ public class FormBarangController {
 
             java.sql.Date tglKadaluarsa = java.sql.Date.valueOf(tgl);
 
-            // Panggil fungsi insert di Model Barang
-            // Pastikan kamu sudah buat fungsi 'insertBarang' di model Barang ya Wak!
             boolean sukses = BarangManagement.tambahBarang(kat.getIdKategori(), nama, harga, stok, tglKadaluarsa);
 
             if (sukses) {

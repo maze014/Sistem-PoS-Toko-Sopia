@@ -20,11 +20,10 @@ public class LoginController {
                 Connection conn = config.DBConfig.getConnection();
 
                 if (user.isEmpty() || pass.isEmpty()) {
-                    JOptionPane.showMessageDialog(loginView, "Woi, Username dan Password tak boleh kosong!");
-                    return; // Berhenti di sini, jangan lanjut ke query
+                    JOptionPane.showMessageDialog(loginView, "Username dan Password tak boleh kosong!");
+                    return;
                 }
 
-                // Query dicek semua biar aman
                 String sql = "SELECT id_user, nama_depan, username, password, role FROM user WHERE username=? AND password=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, user);
@@ -42,8 +41,10 @@ public class LoginController {
                         new AdminView(nama, role).setVisible(true);
                     } else if (role.equalsIgnoreCase("Manajer")) {
                         new ManajerView(nama).setVisible(true);
-                    } else {
+                    } else if (role.equalsIgnoreCase("Kasir")) {
                         new KasirView(nama, idUser).setVisible(true);
+                    } else {
+                        new GudangView(user).setVisible(true);
                     }
                     loginView.dispose();
                 } else {

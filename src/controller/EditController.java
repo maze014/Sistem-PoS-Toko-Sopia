@@ -12,25 +12,22 @@ import java.sql.SQLException;
 
 public class EditController {
     private EditView view;
-    private String usernameLama; // Simpan username lama untuk query UPDATE
+    private String usernameLama;
 
     public EditController(EditView view, String usernameLama) {
         this.view = view;
-
-        // Pasang listener ke tombol simpan di View
         this.view.btnSimpan.addActionListener(e -> simpanUser());
-        this.usernameLama = usernameLama; // Simpan username lama yang dikirim dari UserManagementController
+        this.usernameLama = usernameLama;
     }
 
     private void simpanUser() {
-        // 1. Ambil data dari View
         String namaD = view.txtNamaDepan.getText().trim();
         String namaB = view.txtNamaBelakang.getText().trim();
         String user = view.txtUsername.getText().trim();
         String pass = new String(view.txtPassword.getPassword());
         String role = view.cbRole.getSelectedItem().toString();
 
-        // 2. Validasi: Jangan sampai ada yang kosong
+        // validasi inputan kosong
         if (namaD.isEmpty() || namaD.equals("Nama Depan") ||
                 namaB.isEmpty() || namaB.equals("Nama Belakang") ||
                 user.isEmpty() || user.equals("Masukkan username unik") ||
@@ -50,18 +47,14 @@ public class EditController {
                             "- Wajib ada 1 Angka\n" +
                             "- Wajib ada 1 Karakter Spesial (@,#,$,dll)",
                     "Validasi Gagal", JOptionPane.ERROR_MESSAGE);
-            return; // Hentikan proses kalau password gagal validasi
+            return;
         }
 
-        // 3. Hash Password pakai SHA-256
         String passHashed = HashUtil.hashSHA256(pass);
 
-        // 4. Bungkus ke Model User
         User userBaru = new User(namaD, namaB, user, passHashed, role);  
 
-        // 5. Eksekusi ke Database
         try (Connection conn = DBConfig.getConnection()) {
-            //System.out.println("Username Lama: " + usernameLama); // Debug: Pastikan username lama benar
             String sql = "UPDATE user SET nama_depan = ?, nama_belakang = ?, username = ?, password = ?, role = ? WHERE username= ?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -76,10 +69,9 @@ public class EditController {
 
             if (hasil > 0) {
                 JOptionPane.showMessageDialog(view, "User berhasil diedit!");
-                view.dispose(); // Tutup form setelah sukses
+                view.dispose();
             }
         } catch (SQLException e) {
-            // Cek kalau username kembar (Duplicate Entry)
             if (e.getErrorCode() == 1062) {
                 JOptionPane.showMessageDialog(view, "Username sudah dipakai orang lain!");
             } else {

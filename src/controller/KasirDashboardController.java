@@ -10,14 +10,12 @@ import java.awt.BorderLayout;
 public class KasirDashboardController {
     
     public KasirDashboardController(KasirDashboardView view, int idKasirAktif) {
-        // 1. Ambil Angka Ringkasan
         int omzet = KasirDashboardModel.getOmzetKasirHariIni(idKasirAktif);
         int totalTrx = KasirDashboardModel.getTotalTransaksiKasirHariIni(idKasirAktif);
 
         view.lblOmzet.setText("Rp " + String.format("%,d", omzet));
         view.lblTotalTrx.setText(totalTrx + " Transaksi");
 
-        // 2. Ambil Grafik dan Tempel ke Layar
         JFreeChart chart = KasirDashboardModel.getGrafikPerformaKasir(idKasirAktif);
         
         view.panelWadahGrafik.removeAll();

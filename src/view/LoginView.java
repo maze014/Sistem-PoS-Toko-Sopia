@@ -10,55 +10,40 @@ import utils.RoundedButton;
 import utils.RoundedBorder;
 
 public class LoginView extends JFrame {
-
-    // --- Komponen Form (Sisi Kiri) ---
     private JPanel panelKiri, panelKanan;
     public JTextField txtUsername;
     public JPasswordField txtPassword;
     public JComboBox<String> cbRole;
     public JButton btnLogin;
     private JLabel lblLogoAnimasi;
-
-    // Warna tema ala WaifuChan
-    private Color warnaUngu = new Color(126, 34, 206); // #7e22ce
-    private Color warnaBackground = new Color(255, 255, 255); // #f9fafb
+    private Color warnaUngu = new Color(126, 34, 206);
+    private Color warnaBackground = new Color(255, 255, 255); 
 
     public LoginView() {
-        // --- 1. Setting Frame Utama ---
         setTitle("Login WaifuChan - Sopia POS");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(1000, 600));
-        setResizable(true); // Biar layoutnya gak berantakan kalau di-resize
+        setResizable(true);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        // Gunakan GridLayout(1, 2) untuk membagi frame jadi dua kolom (Kiri & Kanan)
         setLayout(new GridLayout(1, 2));
 
         this.addWindowStateListener(e -> {
-            // Jika status berubah dari Full Screen ke Normal
             if ((e.getOldState() & Frame.MAXIMIZED_BOTH) != 0 &&
                     (e.getNewState() & Frame.MAXIMIZED_BOTH) == 0) {
-
-                // Kasih delay dikit biar transisinya halus baru ke tengah
                 SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
             }
         });
 
-        // ==========================================
-        // [ SISI KIRI: FORM LOGIN ]
-        // ==========================================
         panelKiri = new JPanel();
-        panelKiri.setBackground(Color.WHITE); // Form bersih di latar putih
-        panelKiri.setLayout(new GridBagLayout()); // Pakai GBL buat posisi center-left
-        panelKiri.setBorder(new EmptyBorder(50, 50, 50, 50)); // Margin dalam
+        panelKiri.setBackground(Color.WHITE); 
+        panelKiri.setLayout(new GridBagLayout()); 
+        panelKiri.setBorder(new EmptyBorder(50, 50, 50, 50));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Komponen penuhi lebar
-        gbc.insets = new Insets(0, 0, 15, 0); // Spasi antar komponen (bawah)
-        gbc.gridx = 0; // Semua di kolom 0
-
-        // 1. Logo/Nama Aplikasi di Atas Form
+        gbc.fill = GridBagConstraints.HORIZONTAL; 
+        gbc.insets = new Insets(0, 0, 15, 0); 
+        gbc.gridx = 0; 
         gbc.gridy = 0;
         JLabel lblTitle = new JLabel("Toko Sopia");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 32));
@@ -71,12 +56,10 @@ public class LoginView extends JFrame {
         lblSubtitle.setForeground(Color.GRAY);
         panelKiri.add(lblSubtitle, gbc);
 
-        // -- Spasi tambahan --
         gbc.gridy = 2;
         gbc.insets = new Insets(0, 0, 5, 0);
         panelKiri.add(new JLabel(""), gbc);
 
-        // 2. Input Username
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 0, 5, 0);
         panelKiri.add(createLabelForm("Username"), gbc);
@@ -86,7 +69,6 @@ public class LoginView extends JFrame {
         txtUsername = createTextField("Masukkan username");
         panelKiri.add(txtUsername, gbc);
 
-        // 3. Input Password
         gbc.gridy = 5;
         gbc.insets = new Insets(0, 0, 5, 0);
         panelKiri.add(createLabelForm("Password"), gbc);
@@ -94,18 +76,13 @@ public class LoginView extends JFrame {
         gbc.gridy = 6;
         gbc.insets = new Insets(0, 0, 15, 0);
         txtPassword = createPasswordField("Masukkan password");
-        // Catatan: Untuk ikon mata (show password),
-        // kamu perlu library tambahan atau trik JPanel khusus.
-        // Ini versi standarnya dulu.
         panelKiri.add(txtPassword, gbc);
 
-        // 5. Tombol Login
         gbc.gridy = 9;
-        btnLogin = new RoundedButton("Log In", 30); // 30 adalah tingkat kebulatannya
+        btnLogin = new RoundedButton("Log In", 30);
         btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setBackground(warnaUngu);
-        // Efek Hover Tombol
         btnLogin.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 btnLogin.setBackground(warnaUngu.darker());
@@ -116,13 +93,9 @@ public class LoginView extends JFrame {
             }
         });
         panelKiri.add(btnLogin, gbc);
-
-        // ==========================================
-        // [ SISI KANAN: LOGO & ANIMASI ]
-        // ==========================================
         panelKanan = new JPanel();
         panelKanan.setBackground(warnaBackground);
-        panelKanan.setLayout(new GridBagLayout()); // Center posisi logo
+        panelKanan.setLayout(new GridBagLayout());
 
         URL imgUrl = getClass().getResource("/img/iconTokoSopia.gif");
 
@@ -138,28 +111,24 @@ public class LoginView extends JFrame {
 
         panelKanan.add(lblLogoAnimasi);
 
-        // --- Gabungkan Kedua Panel ke Frame Utama ---
         add(panelKiri);
         add(panelKanan);
     }
 
-    // --- Helper Methods untuk Styling ---
     private JLabel createLabelForm(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("SansSerif", Font.BOLD, 14));
-        lbl.setForeground(new Color(55, 65, 81)); // #374151
+        lbl.setForeground(new Color(55, 65, 81));
         return lbl;
     }
 
     private JTextField createTextField(String placeholder) {
         JTextField tf = new JTextField();
-        tf.setColumns(10); // Lebar minimum
+        tf.setColumns(10);
         tf.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
         tf.setForeground(Color.GRAY);
         tf.setText(placeholder);
-
-        // Efek Placeholder sederhana
         tf.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (tf.getText().equals(placeholder)) {
@@ -183,19 +152,16 @@ public class LoginView extends JFrame {
         pf.setColumns(10);
         pf.setFont(new Font("SansSerif", Font.PLAIN, 14));
         pf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
-
-        // --- LOGIKA PLACEHOLDER ---
-        pf.setEchoChar((char) 0); // Matikan sensor (biar teks placeholder kelihatan)
+        pf.setEchoChar((char) 0);
         pf.setText(placeholder);
         pf.setForeground(Color.GRAY);
-
         pf.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 String pass = new String(pf.getPassword());
                 if (pass.equals(placeholder)) {
                     pf.setText("");
-                    pf.setEchoChar('•'); // Aktifkan sensor (titik-titik) pas ngetik
+                    pf.setEchoChar('•');
                     pf.setForeground(Color.BLACK);
                 }
             }
@@ -204,7 +170,7 @@ public class LoginView extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String pass = new String(pf.getPassword());
                 if (pass.isEmpty()) {
-                    pf.setEchoChar((char) 0); // Matikan sensor lagi
+                    pf.setEchoChar((char) 0);
                     pf.setText(placeholder);
                     pf.setForeground(Color.GRAY);
                 }
@@ -212,8 +178,6 @@ public class LoginView extends JFrame {
         });
         return pf;
     }
-
-    // Main method untuk ngetes view
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new LoginView().setVisible(true);

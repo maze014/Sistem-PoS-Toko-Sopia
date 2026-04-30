@@ -2,19 +2,19 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import controller.AdminController;
+import controller.GudangController;
 import controller.LoginController;
 
 import java.awt.*;
 
-public class AdminView extends JFrame {
-    Color sidebarColor = new Color(0, 204, 204); 
-    Color bgColor = new Color(255, 255, 255);
-    public JButton btnDashboard, btnUserManage, btnManageBarang, btnLogout;
-    JPanel content = new JPanel(new BorderLayout());
+public class GudangView extends JFrame {
+    Color sidebarColor = new Color(44, 62, 80); 
+    Color bgColor = new Color(255, 255, 255); 
+    public JButton btnDashboard, btnManageBarang, btnLogout;
+    public JPanel content = new JPanel(new BorderLayout());
 
-    public AdminView(String namaUser, String role) {
-        setTitle("Sopia POS - Dashboard " + role);
+    public GudangView(String namaUser) {
+        setTitle("Sopia POS - Petugas Gudang (" + namaUser + ")");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -26,7 +26,6 @@ public class AdminView extends JFrame {
         this.addWindowStateListener(e -> {
             if ((e.getOldState() & Frame.MAXIMIZED_BOTH) != 0 &&
                     (e.getNewState() & Frame.MAXIMIZED_BOTH) == 0) {
-
                 SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
             }
         });
@@ -37,26 +36,27 @@ public class AdminView extends JFrame {
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBorder(new EmptyBorder(30, 20, 30, 20));
 
-        JLabel lblLogo = new JLabel("SOPIA POS");
+        JLabel lblLogo = new JLabel("GUDANG POS");
         lblLogo.setForeground(Color.WHITE);
         lblLogo.setFont(new Font("SansSerif", Font.BOLD, 22));
         sidebar.add(lblLogo);
         sidebar.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        btnDashboard = addMenu(sidebar, "Dashboard");
-        btnUserManage = addMenu(sidebar, "User Management");
-        btnManageBarang = addMenu(sidebar, "Management Barang");
+        btnDashboard = addMenu(sidebar, "Dashboard Gudang");
+        btnManageBarang = addMenu(sidebar, "Manajemen Barang");
 
-        new AdminController(this);
+        new GudangController(this);
 
         sidebar.add(Box.createVerticalGlue());
         btnLogout = addMenu(sidebar, "Logout");
         btnLogout.addActionListener(e -> {
             this.dispose();
-            LoginView loginBaru = new LoginView();
+            LoginView loginBaru = new LoginView(); 
             new LoginController(loginBaru);
             loginBaru.setVisible(true);
         });
+
+        new GudangController(this);
 
         add(sidebar, BorderLayout.WEST);
         add(content, BorderLayout.CENTER);
@@ -66,8 +66,8 @@ public class AdminView extends JFrame {
         content.removeAll();
         content.setLayout(new BorderLayout());
         content.add(panelBaru, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
+        content.revalidate(); 
+        content.repaint(); 
     }
 
     private JButton addMenu(JPanel panel, String text) {
@@ -79,37 +79,11 @@ public class AdminView extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         panel.add(btn);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         return btn;
-    }
-}
-
-class StatCard extends JPanel {
-    public StatCard(String title, String value, Color color) {
-        setLayout(new BorderLayout());
-        setBackground(color);
-        setPreferredSize(new Dimension(200, 120));
-        setBorder(new EmptyBorder(15, 15, 15, 15));
-
-        JLabel lblTitle = new JLabel(title);
-        lblTitle.setForeground(Color.WHITE);
-
-        JLabel lblVal = new JLabel(value);
-        lblVal.setFont(new Font("SansSerif", Font.BOLD, 22));
-        lblVal.setForeground(Color.WHITE);
-
-        add(lblTitle, BorderLayout.NORTH);
-        add(lblVal, BorderLayout.CENTER);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-        g2.dispose();
     }
 }

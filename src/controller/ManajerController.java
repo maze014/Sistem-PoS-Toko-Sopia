@@ -10,7 +10,6 @@ public class ManajerController {
 
     public ManajerController(ManajerView manajerView) {
         this.manajerView = manajerView;
-        // 1. Tampilkan Dashboard pas pertama kali buka
         ManajerDashboardView dashboardView = new ManajerDashboardView();
         new ManajerDashboardController(dashboardView); 
         this.manajerView.tampilkanHalaman(dashboardView);

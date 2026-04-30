@@ -16,7 +16,6 @@ public class ManajerDashboardView extends JPanel {
         setBackground(new Color(248, 249, 250));
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // --- ATAS: 3 KARTU MANAJER ---
         JPanel panelKartu = new JPanel(new GridLayout(1, 3, 20, 0));
         panelKartu.setOpaque(false);
         panelKartu.setPreferredSize(new Dimension(0, 130));
@@ -29,7 +28,6 @@ public class ManajerDashboardView extends JPanel {
         panelKartu.add(cardTransaksi);
         panelKartu.add(cardStok);
 
-        // --- TENGAH: WADAH GRAFIK LAPORAN ---
         panelWadahGrafik = new JPanel(new BorderLayout());
         panelWadahGrafik.setBackground(Color.WHITE);
         panelWadahGrafik.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230)));

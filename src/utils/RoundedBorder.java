@@ -18,15 +18,12 @@ public class RoundedBorder extends AbstractBorder {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(color);
-        // Menggambar garis tepi melengkung
         g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
         g2d.dispose();
     }
 
     @Override
     public Insets getBorderInsets(Component c) {
-        // Kasih padding dalam biar teks gak nempel ke lengkungan (Top, Left, Bottom,
-        // Right)
         return new Insets(10, 15, 10, 15);
     }
 }

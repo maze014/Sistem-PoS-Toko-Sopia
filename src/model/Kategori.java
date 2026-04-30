@@ -14,7 +14,6 @@ public class Kategori {
         this.namaKategori = namaKategori;
     }
 
-    // Biar pas muncul di JComboBox yang keluar adalah Namanya, bukan alamat memorinya
     @Override
     public String toString() {
         return namaKategori;

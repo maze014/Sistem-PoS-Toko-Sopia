@@ -15,21 +15,16 @@ public class RegisterController {
 
     public RegisterController(RegisterView view) {
         this.view = view;
-
-        // Pasang listener ke tombol simpan di View
         this.view.btnSimpan.addActionListener(e -> simpanUser());
-
     }
 
     private void simpanUser() {
-        // 1. Ambil data dari View
         String namaD = view.txtNamaDepan.getText().trim();
         String namaB = view.txtNamaBelakang.getText().trim();
         String user = view.txtUsername.getText().trim();
         String pass = new String(view.txtPassword.getPassword());
         String role = view.cbRole.getSelectedItem().toString();
 
-        // 2. Validasi: Jangan sampai ada yang kosong
         if (namaD.isEmpty() || namaD.equals("Nama Depan") ||
                 namaB.isEmpty() || namaB.equals("Nama Belakang") ||
                 user.isEmpty() || user.equals("Masukkan username unik") ||
@@ -49,16 +44,13 @@ public class RegisterController {
                             "- Wajib ada 1 Angka\n" +
                             "- Wajib ada 1 Karakter Spesial (@,#,$,dll)",
                     "Validasi Gagal", JOptionPane.ERROR_MESSAGE);
-            return; // Hentikan proses kalau password gagal validasi
+            return;
         }
 
-        // 3. Hash Password pakai SHA-256
         String passHashed = HashUtil.hashSHA256(pass);
 
-        // 4. Bungkus ke Model User
         User userBaru = new User(namaD, namaB, user, passHashed, role);
 
-        // 5. Eksekusi ke Database
         try (Connection conn = DBConfig.getConnection()) {
             String sql = "INSERT INTO user (nama_depan, nama_belakang, username, password, role) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -73,10 +65,9 @@ public class RegisterController {
 
             if (hasil > 0) {
                 JOptionPane.showMessageDialog(view, "User baru berhasil didaftarkan!");
-                view.dispose(); // Tutup form setelah sukses
+                view.dispose();
             }
         } catch (SQLException e) {
-            // Cek kalau username kembar (Duplicate Entry)
             if (e.getErrorCode() == 1062) {
                 JOptionPane.showMessageDialog(view, "Username sudah dipakai orang lain!");
             } else {

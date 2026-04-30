@@ -12,7 +12,7 @@ import config.DBConfig;
 public class UserManagement {
     public static List<User> getAllUsers() {
         List<User> listUser = new ArrayList<>();
-        String sql = "SELECT nama_depan, nama_belakang, username, role FROM user"; // Pastikan nama tabel benar
+        String sql = "SELECT nama_depan, nama_belakang, username, role FROM user";
 
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);
@@ -25,7 +25,6 @@ public class UserManagement {
                         rs.getString("username"),
                         null,
                         rs.getString("role"));
-                // Tambahkan setter ID kalau perlu untuk hapus/edit
                 listUser.add(u);
             }
         } catch (SQLException e) {
@@ -34,23 +33,14 @@ public class UserManagement {
         return listUser;
     }
 
-    // Fungsi buat hapus user, kembaliannya boolean (true kalau sukses, false kalau
-    // gagal)
     public static boolean deleteUser(String username) {
-        // Peringatan: Pastikan nama tabelnya 'users' atau 'user', sesuaikan dengan
-        // databasemu!
         String sql = "DELETE FROM user WHERE username = ?";
 
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Ganti tanda tanya (?) dengan username yang mau dihapus
             ps.setString(1, username);
-
-            // Eksekusi query-nya! (executeUpdate dipakai untuk Insert, Update, Delete)
             int barisYangTerkeping = ps.executeUpdate();
-
-            // Kalau ada baris yang kehapus (lebih dari 0), berarti sukses!
             return barisYangTerkeping > 0;
 
         } catch (SQLException e) {

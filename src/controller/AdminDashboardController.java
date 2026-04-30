@@ -17,17 +17,11 @@ public class AdminDashboardController {
         this.view = view;
 
         view.resetWarnaKartu();
-        view.cardPengguna.setBackground(new Color(243, 232, 255)); // Set default kartu Pengguna aktif
+        view.cardPengguna.setBackground(new Color(243, 232, 255));
         
-        // 1. Load angka di kartu saat pertama kali buka
         refreshDashboardOtomatis();
-
-        // 2. Tampilkan grafik pertama (Pengguna) sebagai default
         tampilkanGrafikPengguna();
         
-        // ==========================================
-        // 3. LOGIKA KLIK KARTU (TOMBOL FILTER)
-        // ==========================================
         view.cardPengguna.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {  
                 ubahWarnaKartu(view.cardPengguna);
@@ -49,18 +43,14 @@ public class AdminDashboardController {
             }
         });
     }
-    // ==========================================
-    // FUNGSI PENGHUBUNG MODEL & VIEW
-    // ==========================================
+
     public void refreshDashboardOtomatis() {
-        // Ambil Int dari model, set ke Label
         view.lblAngkaPengguna.setText(String.valueOf(AdminDashboardModel.getTotalPengguna()));
         view.lblAngkaBarang.setText(String.valueOf(AdminDashboardModel.getTotalBarang()));
         view.lblAngkaKategori.setText(String.valueOf(AdminDashboardModel.getTotalKategori()));
     }
 
     private void tampilkanGrafikPengguna() {
-        // Minta grafik dari Model, lalu tempel ke layar
         pasangGrafikKeLayar(AdminDashboardModel.getGrafikPengguna());
     }
 
@@ -72,7 +62,6 @@ public class AdminDashboardController {
         pasangGrafikKeLayar(AdminDashboardModel.getGrafikKategori());
     }
 
-    // --- HELPER UNTUK UI ---
     private void pasangGrafikKeLayar(JFreeChart chart) {
         view.panelWadahGrafik.removeAll(); 
         view.panelWadahGrafik.add(new ChartPanel(chart), java.awt.BorderLayout.CENTER); 

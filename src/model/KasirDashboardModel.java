@@ -26,13 +26,9 @@ public class KasirDashboardModel {
         return 0;
     }
 
-    // ==========================================
-    // FUNGSI BARU: GRAFIK PERFORMA KASIR
-    // ==========================================
     public static JFreeChart getGrafikPerformaKasir(int idKasir) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
-        // Tarik data 7 hari terakhir KHUSUS untuk kasir ini
         String sql = "SELECT DATE(`tanggal`) as tgl, SUM(total_pembayaran) as pendapatan " +
                      "FROM transaksi " +
                      "WHERE id_user = ? AND DATE(`tanggal`) >= CURDATE() - INTERVAL 6 DAY " +
@@ -41,7 +37,7 @@ public class KasirDashboardModel {
         try (Connection conn = DBConfig.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            ps.setInt(1, idKasir); // Kunci ID Kasir!
+            ps.setInt(1, idKasir);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {

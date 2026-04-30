@@ -16,15 +16,13 @@ public class LaporanStokController {
         view.resetWarna();
         view.cardTotalBarang.setBackground(new Color(243, 232, 255)); 
         refreshDashboardOtomatis();
-        tampilkanGrafikDistribusiKategori(); // Grafik default
+        tampilkanGrafikDistribusiKategori();
 
-        // Klik Total Barang -> Grafik Pie Distribusi Kategori
         view.cardTotalBarang.addActionListener(e -> {
             ubahWarnaKartu(view.cardTotalBarang);
             tampilkanGrafikDistribusiKategori();
         });
 
-        // Klik Stok Tipis -> Grafik Batang Barang Paling Sikit
         view.cardStokTipis.addActionListener(e -> {
             ubahWarnaKartu(view.cardStokTipis);
             tampilkanGrafikStokKritis();
@@ -37,7 +35,6 @@ public class LaporanStokController {
     }
 
     public void refreshDashboardOtomatis() {
-        // Ambil angka dari Model
         view.lblAngkaTotal.setText(String.valueOf(LaporanStokModel.getTotalUnitBarang()));
         view.lblAngkaTipis.setText(String.valueOf(LaporanStokModel.getJumlahStokTipis()));
         view.lblAngkaKategori.setText(String.valueOf(LaporanStokModel.getTotalKategori()));
@@ -54,8 +51,7 @@ public class LaporanStokController {
     private void tampilkanGrafikKategori() {
         render(LaporanStokModel.getGrafikKategori());
     }
-
-    // --- HELPER UNTUK UI ---
+    
     private void render(JFreeChart chart) {
         view.panelWadahGrafik.removeAll();
         view.panelWadahGrafik.add(new ChartPanel(chart), BorderLayout.CENTER);

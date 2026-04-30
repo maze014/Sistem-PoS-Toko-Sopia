@@ -11,7 +11,6 @@ public class KasirController {
 
     public KasirController(KasirView kasirView) {
         this.view = kasirView;
-        // Contoh KasirController.java
         KasirDashboardView dashView = new KasirDashboardView();
         new KasirDashboardController(dashView, view.idUserAktif);
         view.tampilkanHalaman(dashView);

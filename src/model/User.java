@@ -5,13 +5,10 @@ public class User {
     private String namaDepan;
     private String namaBelakang;
     private String username;
-    private String password; // Ini nanti isinya yang sudah di-hash
+    private String password;
     private String role;
-
-    // Constructor Kosong (Penting buat framework atau manual set)
     public User() {}
 
-    // Constructor Lengkap (Buat register/tambah user baru)
     public User(String namaDepan, String namaBelakang, String username, String password, String role) {
         this.namaDepan = namaDepan;
         this.namaBelakang = namaBelakang;
@@ -19,8 +16,6 @@ public class User {
         this.password = password;
         this.role = role;
     }
-
-    // --- GETTER & SETTER (Wajib ada biar data bisa diambil/diubah) ---
     
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -40,7 +35,6 @@ public class User {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
     
-    // Method bantuan buat dapetin nama lengkap
     public String getNamaLengkap() {
         return namaDepan + " " + namaBelakang;
     }

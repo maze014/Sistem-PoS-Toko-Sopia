@@ -8,13 +8,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LaporanTransaksiModel {
-
-    // ==========================================
-    // 1. FUNGSI HITUNG TOTAL PENDAPATAN
-    // ==========================================
     public static double getTotalPendapatan(int limitHari) {
         double total = 0;
-        // Menggunakan interval limitHari - 1 agar hari ini terhitung dalam 7 hari terakhir
         String sql = "SELECT SUM(total_pembayaran) FROM transaksi " +
                      "WHERE DATE(tanggal) >= CURDATE() - INTERVAL " + (limitHari - 1) + " DAY";
 
@@ -30,16 +25,13 @@ public class LaporanTransaksiModel {
         return total;
     }
 
-    // ==========================================
-    // 2. FUNGSI BUAT GRAFIK TRANSAKSI
-    // ==========================================
     public static JFreeChart getGrafikTransaksi(int limitHari) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
-        String sql = "SELECT DATE(`tanggal`) as tgl, SUM(total_pembayaran) as pendapatan " +
+        String sql = "SELECT DATE(tanggal) as tgl, SUM(total_pembayaran) as pendapatan " +
                      "FROM transaksi " +
-                     "WHERE DATE(`tanggal`) >= CURDATE() - INTERVAL " + (limitHari - 1) + " DAY " +
-                     "GROUP BY tgl ORDER BY tgl ASC";
+                     "WHERE DATE(tanggal) >= CURDATE() - INTERVAL " + (limitHari - 1) + " DAY " +
+                     "GROUP BY tanggal ORDER BY tanggal ASC";
 
         try (Connection conn = DBConfig.getConnection(); 
              Statement st = conn.createStatement(); 

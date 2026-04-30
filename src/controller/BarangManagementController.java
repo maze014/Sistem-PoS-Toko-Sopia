@@ -12,13 +12,14 @@ import view.EditBarangView;
 
 public class BarangManagementController {
     private BarangManagementView view;
+    private String role;
 
-    public BarangManagementController(BarangManagementView view) {
+    public BarangManagementController(BarangManagementView view, String roleUser) {
         this.view = view;
+        this.role = roleUser;
         refreshData();
 
         view.btnTambah.addActionListener(e -> {
-            // Nanti panggil Pop-up Form Barang di sini
             FormBarangView form = new FormBarangView((JFrame) SwingUtilities.getWindowAncestor(view));
             new FormBarangController(form);
             form.setVisible(true);
@@ -28,7 +29,6 @@ public class BarangManagementController {
 
     public void refreshData() {
         view.panelDaftarBarang.removeAll();
-        // Asumsi kamu udah bikin fungsi getAllBarang() di Model
         List<Barang> listBarang = BarangManagement.getAllBarang();
 
         for (Barang b : listBarang) {
@@ -49,9 +49,6 @@ public class BarangManagementController {
                 card.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-        // ==========================================
-        // 1. KIRI: Info Barang (Nama & Harga)
-        // ==========================================
         JPanel infoPanel = new JPanel(new GridLayout(2, 1));
         infoPanel.setOpaque(false);
         infoPanel.setPreferredSize(new Dimension(250, 60));
@@ -63,10 +60,7 @@ public class BarangManagementController {
         infoPanel.add(lblNama);
         infoPanel.add(lblHarga);
 
-        // ==========================================
-        // 2. TENGAH: Kontrol Stok (+ dan -)
-        // ==========================================
-        JPanel stokPanel = new JPanel(new GridBagLayout()); // Pakai GridBag biar center vertikal
+        JPanel stokPanel = new JPanel(new GridBagLayout());
         stokPanel.setOpaque(false);
         JPanel wadahStok = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         wadahStok.setOpaque(false);
@@ -76,25 +70,25 @@ public class BarangManagementController {
         lblStok.setFont(new Font("SansSerif", Font.BOLD, 14));
         JButton btnPlus = new JButton("+");
 
-        // Logika Tombol Minus
+        // tombol stok berkurang
         btnMinus.addActionListener(e -> {
             if (b.getStok() > 0) { // Biar stok gak minus
                 boolean sukses = BarangManagement.updateStok(b.getIdBarang(), -1);
                 if (sukses) {
-                    b.setStok(b.getStok() - 1); // Update objeknya
-                    lblStok.setText("Stok: " + b.getStok()); // Langsung ubah teks di layar tanpa refresh total!
+                    b.setStok(b.getStok() - 1);
+                    lblStok.setText("Stok: " + b.getStok()); 
                 }
             } else {
                 JOptionPane.showMessageDialog(view, "Stok udah abis Wak, gak bisa dikurangin lagi!");
             }
         });
 
-        // Logika Tombol Plus
+        // ombol stok bertambah
         btnPlus.addActionListener(e -> {
             boolean sukses = BarangManagement.updateStok(b.getIdBarang(), 1);
             if (sukses) {
-                b.setStok(b.getStok() + 1); // Update objeknya
-                lblStok.setText("Stok: " + b.getStok()); // Mulus ganti angka di layar
+                b.setStok(b.getStok() + 1);
+                lblStok.setText("Stok: " + b.getStok());
             }
         });
 
@@ -103,26 +97,20 @@ public class BarangManagementController {
         wadahStok.add(btnPlus);
         stokPanel.add(wadahStok);
 
-        // ==========================================
-        // 3. KANAN: Tombol Aksi (Edit & Hapus)
-        // ==========================================
-        JPanel aksiPanel = new JPanel(new GridBagLayout()); // Pakai GridBag biar center vertikal
+        JPanel aksiPanel = new JPanel(new GridBagLayout());
         aksiPanel.setOpaque(false);
         JPanel wadahTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         wadahTombol.setOpaque(false);
 
         JButton btnEdit = new JButton("Edit");
+
         JButton btnDelete = new JButton("Hapus");
         btnDelete.setForeground(Color.RED);
-
-         // --- Logika Tombol Edit (Khusus user ini) ---
+        
+        // tombol edit
         btnEdit.addActionListener(e -> {
             EditBarangView editPopUp = new EditBarangView((JFrame) SwingUtilities.getWindowAncestor(view));
             editPopUp.setTitle("Edit Barang: " + b.getNamaBarang());
-
-            // ==========================================
-            // 1. TEMBAKKAN DATA LAMA KE DALAM FORM
-            // ==========================================
             editPopUp.txtNamaBarang.setText(b.getNamaBarang());
             editPopUp.txtNamaBarang.setForeground(Color.BLACK);
             editPopUp.txtHarga.setText(String.valueOf(b.getHarga()));
@@ -133,47 +121,47 @@ public class BarangManagementController {
             editPopUp.txtKadaluarsa.setText(String.valueOf(b.getTanggalKadaluarsa()));
             editPopUp.txtKadaluarsa.setForeground(Color.BLACK);
 
-            // 3. Pasang Otaknya
-            new EditBarangController(editPopUp, b.getIdBarang()); // Kirim username lama ke controller
+            new EditBarangController(editPopUp, b.getIdBarang()); 
             editPopUp.setVisible(true);
-
-            // 4. Refresh data setelah beres ngedit
+            
             refreshData();
         });
-        // --- Logika Tombol Delete (Khusus user ini) ---
+        
+        // tombol delete
         btnDelete.addActionListener(e -> {
             int konfirmasi = JOptionPane.showConfirmDialog(view,
-                    "Yakin mau hapus " + b.getNamaBarang() + "?",
+                "Yakin mau hapus " + b.getNamaBarang() + "?",
                     "Hapus Barang", JOptionPane.YES_NO_OPTION);
-
-            if (konfirmasi == JOptionPane.YES_OPTION) {
-                boolean berhasil = BarangManagement.deleteBarang(b.getIdBarang());
-
-                // 2. CEK HASILNYA
+                    
+                    if (konfirmasi == JOptionPane.YES_OPTION) {
+                        boolean berhasil = BarangManagement.deleteBarang(b.getIdBarang());
+                        
                 if (berhasil) {
                     JOptionPane.showMessageDialog(view,
-                            "Barang " + b.getNamaBarang() + " berhasil dimusnahkan!",
-                            "Sukses", JOptionPane.INFORMATION_MESSAGE);
-
-                    // 3. REFRESH LAYAR (Biar card-nya langsung hilang)
-                    refreshData();
-                } else {
-                    JOptionPane.showMessageDialog(view,
+                        "Barang " + b.getNamaBarang() + " berhasil dimusnahkan!",
+                        "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                    
+                        refreshData();
+                    } else {
+                        JOptionPane.showMessageDialog(view,
                             "Gagal menghapus barang! Cek koneksi database Wak.",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
+        
         wadahTombol.add(btnEdit);
         wadahTombol.add(btnDelete);
         aksiPanel.add(wadahTombol);
+        
+        if (role.equalsIgnoreCase("Gudang")) {
+                btnDelete.setVisible(false);
+            }
 
-        // Gabungkan semuanya ke Card
         card.add(infoPanel, BorderLayout.WEST);
         card.add(stokPanel, BorderLayout.CENTER);
         card.add(aksiPanel, BorderLayout.EAST);
-
+        
         return card;
     }
 }

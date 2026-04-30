@@ -8,25 +8,31 @@ import controller.LoginController;
 import java.awt.*;
 
 public class KasirView extends JFrame {
-    // Tema Kasir (Misal: Hijau Teal biar segar)
     Color sidebarColor = new Color(13, 148, 136); 
     
     public JButton btnDashboard, btnTransaksi, btnRiwayat, btnStok, btnLogout;
     public JPanel content = new JPanel(new BorderLayout());
-    
-    // Simpan data kasir yang lagi login
-    public int idUserAktif = 1; // Nanti ini diganti sesuai ID kasir yang login dari LoginController
+    public int idUserAktif = 1; 
 
     public KasirView(String namaUser, int idUser) {
-        this.idUserAktif = idUser; // Simpan ID user buat masukin ke database transaksi nanti
+        this.idUserAktif = idUser;
         
-        setTitle("Sopia POS - Kasir: " + namaUser);
+        setTitle("Sopia POS - Kasir " + namaUser);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(1000, 600));
 
-        // --- SIDEBAR ---
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(1000, 600));
+        setResizable(true); 
+
+        this.addWindowStateListener(e -> {
+            if ((e.getOldState() & Frame.MAXIMIZED_BOTH) != 0 &&
+                    (e.getNewState() & Frame.MAXIMIZED_BOTH) == 0) {
+                SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
+            }
+        });
+
         JPanel sidebar = new JPanel();
         sidebar.setBackground(sidebarColor);
         sidebar.setPreferredSize(new Dimension(260, 0));
@@ -39,7 +45,6 @@ public class KasirView extends JFrame {
         sidebar.add(lblLogo);
         sidebar.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        // MENU KASIR
         btnDashboard = addMenu(sidebar, "Dashboard Kasir");
         btnTransaksi = addMenu(sidebar, "Transaksi Baru");
         btnRiwayat = addMenu(sidebar, "Riwayat Penjualan");

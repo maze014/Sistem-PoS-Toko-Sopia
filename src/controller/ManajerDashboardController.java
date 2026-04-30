@@ -16,21 +16,18 @@ public class ManajerDashboardController {
         view.resetWarna();
         view.cardOmzet.setBackground(new Color(243, 232, 255)); 
         refreshDashboardOtomatis();
-        tampilkanLaporanOmzet(); // Default awal
+        tampilkanLaporanOmzet();
 
-        // Klik Omzet -> Grafik Garis (Tren Penjualan)
         view.cardOmzet.addActionListener(e -> {
             ubahWarnaKartu(view.cardOmzet);
             tampilkanLaporanOmzet();
         });
 
-        // Klik Transaksi -> Grafik Batang (Perbandingan Harian)
         view.cardTransaksi.addActionListener(e -> {
             ubahWarnaKartu(view.cardTransaksi);
             tampilkanLaporanTransaksi();
         });
 
-        // Klik Stok -> Grafik Pie (Stok Menipis)
         view.cardStok.addActionListener(e -> {
             ubahWarnaKartu(view.cardStok);
             tampilkanLaporanStok();
@@ -38,7 +35,6 @@ public class ManajerDashboardController {
     }
 
     public void refreshDashboardOtomatis() {
-        // Ambil angka dari Model dan set ke Label
         int omzet = ManajerDashboardModel.getOmzetBulanIni();
         view.lblAngkaOmzet.setText("Rp " + String.format("%,d", omzet));
         
@@ -58,7 +54,6 @@ public class ManajerDashboardController {
         renderChart(ManajerDashboardModel.getGrafikStok());
     }
 
-    // --- HELPER UNTUK UI ---
     private void renderChart(JFreeChart chart) {
         view.panelWadahGrafik.removeAll();
         view.panelWadahGrafik.add(new ChartPanel(chart), BorderLayout.CENTER);
@@ -68,6 +63,6 @@ public class ManajerDashboardController {
 
     private void ubahWarnaKartu(javax.swing.JButton kartuAktif) {
         view.resetWarna();
-        kartuAktif.setBackground(new Color(243, 232, 255)); // Warna aktif
+        kartuAktif.setBackground(new Color(243, 232, 255));
     }
 }

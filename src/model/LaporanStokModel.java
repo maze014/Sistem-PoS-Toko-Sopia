@@ -1,6 +1,6 @@
 package model;
 
-import config.DBConfig; // Sesuaikan dengan package DBConfig kamu
+import config.DBConfig;
 import java.sql.*;
 
 import org.jfree.chart.ChartFactory;
@@ -12,10 +12,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class LaporanStokModel {
-
-    // ==========================================
-    // 1. FUNGSI NGAMBIL ANGKA RINGKASAN
-    // ==========================================
     public static int getTotalUnitBarang() {
         try (Connection conn = DBConfig.getConnection(); Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery("SELECT SUM(stok) FROM barang")) {
@@ -40,9 +36,6 @@ public class LaporanStokModel {
         return 0;
     }
 
-    // ==========================================
-    // 2. FUNGSI BIKIN GRAFIK
-    // ==========================================
     public static JFreeChart getGrafikDistribusiKategori() {
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         String sql = "SELECT k.nama_kategori, SUM(b.stok) as total_stok " +
@@ -70,7 +63,6 @@ public class LaporanStokModel {
 
         JFreeChart chart = ChartFactory.createBarChart("Barang dengan Stok Kritis", "Nama Barang", "Sisa Stok", dataset, PlotOrientation.VERTICAL, false, true, false);
         
-        // Pasang gembok Integer biar angkanya gak desimal
         CategoryPlot plot = chart.getCategoryPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -90,10 +82,8 @@ public class LaporanStokModel {
             }
         } catch (SQLException e) { e.printStackTrace(); }
 
-        // Pakai format lengkap biar bisa dikasih gembok orientasi
         JFreeChart chart = ChartFactory.createBarChart("Jumlah Barang per Kategori", "Kategori", "Total Barang", dataset, PlotOrientation.VERTICAL, true, true, false);
         
-        // Pasang gembok Integer di sini juga (Kasus angka desimal kemarin!)
         CategoryPlot plot = chart.getCategoryPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

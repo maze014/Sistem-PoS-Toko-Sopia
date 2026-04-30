@@ -2,86 +2,81 @@ package model;
 
 import config.DBConfig;
 import java.sql.*;
-import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransaksiModel {
+    public static List<Object[]> cariBarangLive(String keyword) {
+        List<Object[]> hasil = new ArrayList<>();
+        String sql = "SELECT id_barang, nama_barang, harga, stok FROM barang " +
+                     "WHERE nama_barang LIKE ? OR id_barang LIKE ? LIMIT 5";
 
-    // Cari barang spesifik pas kasir ngetik ID/Nama
-    public static Object[] cariBarangUntukKeranjang(String keyword) {
-        String sql = "SELECT id_barang, nama_barang, harga_jual, stok FROM barang " +
-                     "WHERE id_barang = ? OR nama_barang = ?";
         try (Connection conn = DBConfig.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, keyword);
-            ps.setString(2, keyword);
+            String search = "%" + keyword + "%";
+            ps.setString(1, search);
+            ps.setString(2, search);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new Object[]{
+            while (rs.next()) {
+                hasil.add(new Object[]{
                     rs.getInt("id_barang"), 
                     rs.getString("nama_barang"), 
-                    rs.getInt("harga_jual"), 
+                    rs.getInt("harga"), 
                     rs.getInt("stok")
-                };
+                });
             }
         } catch (SQLException e) { e.printStackTrace(); }
-        return null; // Kalau barang gak ketemu
+        return hasil;
     }
 
-    // FUNGSI SAKTI CHECKOUT (Database Transaction)
-    public static boolean prosesCheckout(int idKasir, DefaultTableModel keranjang, int totalBelanja, int uangBayar) {
+    public static Object[] cariBarangUntukKeranjang(String keyword) {
+        String sql = "SELECT id_barang, nama_barang, harga, stok FROM barang WHERE id_barang = ? OR nama_barang = ?";
+        try (Connection conn = DBConfig.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, keyword); ps.setString(2, keyword);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return new Object[]{ rs.getInt("id_barang"), rs.getString("nama_barang"), rs.getInt("harga"), rs.getInt("stok") };
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
+
+    public static boolean prosesCheckout(int idKasir, List<Object[]> keranjang, int totalBelanja, int uangBayar) {
         Connection conn = null;
         try {
             conn = DBConfig.getConnection();
-            conn.setAutoCommit(false); // Kunci database! Kalau ada error, batalkan semua.
+            conn.setAutoCommit(false); 
 
-            // 1. Insert Transaksi (Asumsi id_pelanggan = 1 untuk pelanggan umum)
             String sqlTrx = "INSERT INTO transaksi (id_pelanggan, id_user, tanggal, total_pembayaran) VALUES (1, ?, NOW(), ?)";
             PreparedStatement psTrx = conn.prepareStatement(sqlTrx, Statement.RETURN_GENERATED_KEYS);
-            psTrx.setInt(1, idKasir);
-            psTrx.setInt(2, totalBelanja);
+            psTrx.setInt(1, idKasir); psTrx.setInt(2, totalBelanja);
             psTrx.executeUpdate();
 
-            // Ambil ID Transaksi yang baru aja dibikin MySQL
             ResultSet rsKeys = psTrx.getGeneratedKeys();
-            int idTransaksiBaru = 0;
-            if (rsKeys.next()) idTransaksiBaru = rsKeys.getInt(1);
+            int idTransaksiBaru = rsKeys.next() ? rsKeys.getInt(1) : 0;
 
-            // 2. Loop Keranjang: Insert Detail Transaksi & Kurangi Stok Barang
             String sqlDetail = "INSERT INTO detail_transaksi (id_transaksi, id_barang, jumlah_barang) VALUES (?, ?, ?)";
             PreparedStatement psDetail = conn.prepareStatement(sqlDetail);
-            
             String sqlStok = "UPDATE barang SET stok = stok - ? WHERE id_barang = ?";
             PreparedStatement psStok = conn.prepareStatement(sqlStok);
 
-            for (int i = 0; i < keranjang.getRowCount(); i++) {
-                int idBarang = (int) keranjang.getValueAt(i, 0);
-                int qty = (int) keranjang.getValueAt(i, 3);
+            for (Object[] item : keranjang) {
+                int idBarang = (int) item[0];
+                int qty = (int) item[3];
 
-                // Suntik ke detail_transaksi
-                psDetail.setInt(1, idTransaksiBaru);
-                psDetail.setInt(2, idBarang);
-                psDetail.setInt(3, qty);
+                psDetail.setInt(1, idTransaksiBaru); psDetail.setInt(2, idBarang); psDetail.setInt(3, qty);
                 psDetail.addBatch();
 
-                // Kurangi stok di tabel barang
-                psStok.setInt(1, qty);
-                psStok.setInt(2, idBarang);
+                psStok.setInt(1, qty); psStok.setInt(2, idBarang);
                 psStok.addBatch();
             }
-            psDetail.executeBatch();
-            psStok.executeBatch();
+            psDetail.executeBatch(); psStok.executeBatch();
 
-            // 3. Insert Pembayaran (Otomatis Tunai)
             String sqlBayar = "INSERT INTO pembayaran (id_transaksi, jumlah_bayar, metode_pembayaran) VALUES (?, ?, 'Tunai')";
             PreparedStatement psBayar = conn.prepareStatement(sqlBayar);
-            psBayar.setInt(1, idTransaksiBaru);
-            psBayar.setInt(2, uangBayar);
+            psBayar.setInt(1, idTransaksiBaru); psBayar.setInt(2, uangBayar);
             psBayar.executeUpdate();
 
-            // 4. Kalau semua sukses, COMMIT! Permanenkan data.
             conn.commit();
             return true;
-
         } catch (SQLException e) {
             try { if (conn != null) conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             e.printStackTrace();

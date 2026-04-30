@@ -1,6 +1,6 @@
 package model;
 
-import config.DBConfig; // Sesuaikan kalau packagenya util.DBConfig
+import config.DBConfig;
 import java.sql.*;
 
 import org.jfree.chart.ChartFactory;
@@ -12,10 +12,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class ManajerDashboardModel {
-
-    // ==========================================
-    // 1. FUNGSI NGAMBIL ANGKA RINGKASAN
-    // ==========================================
     public static int getOmzetBulanIni() {
         try (Connection conn = DBConfig.getConnection(); Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery("SELECT SUM(total_pembayaran) FROM transaksi WHERE MONTH(tanggal) = MONTH(CURRENT_DATE)")) {
@@ -40,9 +36,6 @@ public class ManajerDashboardModel {
         return 0;
     }
 
-    // ==========================================
-    // 2. FUNGSI BIKIN GRAFIK
-    // ==========================================
     public static JFreeChart getGrafikOmzet() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String sql = "SELECT DATE(tanggal), SUM(total_pembayaran) FROM transaksi WHERE DATE(tanggal) >= CURDATE() - INTERVAL 6 DAY GROUP BY tanggal ORDER BY tanggal ASC";
@@ -55,14 +48,13 @@ public class ManajerDashboardModel {
 
     public static JFreeChart getGrafikTransaksi() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        String sql = "SELECT DATE(tanggal), COUNT(*) FROM transaksi WHERE DATE(tanggal) >= CURDATE() - INTERVAL 6 DAY GROUP BY tanggal ORDER BY tanggal ASC";
+        String sql = "SELECT DATE(tanggal), COUNT(*) FROM transaksi WHERE DATE(tanggal) >= CURDATE() - INTERVAL 6 DAY GROUP BY DATE(tanggal) ORDER BY DATE(tanggal) ASC";
         try (Connection conn = DBConfig.getConnection(); Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) dataset.addValue(rs.getInt(2), "Transaksi", rs.getString(1));
         } catch (SQLException e) { e.printStackTrace(); }
 
         JFreeChart chart = ChartFactory.createBarChart("Volume Transaksi Harian", "Tanggal", "Jumlah Transaksi", dataset, PlotOrientation.VERTICAL, true, true, false);
         
-        // Kunci sumbu Y biar gak ada transaksi desimal (misal: 1.5 transaksi)
         CategoryPlot plot = chart.getCategoryPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

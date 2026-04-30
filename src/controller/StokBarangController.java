@@ -12,10 +12,8 @@ public class StokBarangController {
     public StokBarangController(StokBarangView view) {
         this.view = view;
         
-        // Tampilkan semua barang saat pertama buka
         renderCards("");
 
-        // Fitur Live Search
         view.txtCari.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { renderCards(view.txtCari.getText()); }
             public void removeUpdate(DocumentEvent e) { renderCards(view.txtCari.getText()); }

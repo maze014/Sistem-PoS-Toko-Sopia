@@ -9,16 +9,12 @@ import java.net.URL;
 
 import utils.RoundedBorder;
 import utils.RoundedButton;
-import model.Kategori; // WAJIB ADA BIAR COMBOBOX BISA BACA DATABASE
+import model.Kategori;
 
 public class EditBarangView extends JDialog {
-
-    // Komponen Form
     public JTextField txtNamaBarang, txtHarga, txtStok, txtKadaluarsa;
     public JComboBox<Kategori> cbKategori;
     public RoundedButton btnSimpan;
-
-    // Warna Tema (Konsisten dengan Sopia POS)
     private Color warnaOrange = new Color(255, 128, 0);
     private Color warnaBackground = new Color(255, 255, 255);
 
@@ -30,9 +26,6 @@ public class EditBarangView extends JDialog {
         setResizable(false);
         setLayout(new GridLayout(1, 2));
 
-        // ==========================================
-        // [ SISI KIRI: FORM BARANG ]
-        // ==========================================
         JPanel panelKiri = new JPanel(new GridBagLayout());
         panelKiri.setBackground(Color.WHITE);
         panelKiri.setBorder(new EmptyBorder(30, 60, 30, 60));
@@ -42,13 +35,11 @@ public class EditBarangView extends JDialog {
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 10, 0);
 
-        // Header
         gbc.gridy = 0;
         JLabel lblTitle = new JLabel("Form Barang");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
         panelKiri.add(lblTitle, gbc);
 
-        // Nama Barang
         gbc.gridy = 1;
         gbc.insets = new Insets(10, 0, 5, 0);
         panelKiri.add(createLabelForm("Nama Barang"), gbc);
@@ -57,7 +48,6 @@ public class EditBarangView extends JDialog {
         txtNamaBarang = createTextField("Contoh: Keripik Singkong Pedas");
         panelKiri.add(txtNamaBarang, gbc);
 
-        // Baris Label Harga & Stok (Disebelahkan)
         gbc.gridy = 3;
         JPanel panelLabelHS = new JPanel(new GridLayout(1, 2, 10, 0));
         panelLabelHS.setOpaque(false);
@@ -65,7 +55,6 @@ public class EditBarangView extends JDialog {
         panelLabelHS.add(createLabelForm("Stok Awal"));
         panelKiri.add(panelLabelHS, gbc);
 
-        // Baris Input Harga & Stok (Disebelahkan)
         gbc.gridy = 4;
         JPanel panelInputHS = new JPanel(new GridLayout(1, 2, 10, 0));
         panelInputHS.setOpaque(false);
@@ -75,7 +64,6 @@ public class EditBarangView extends JDialog {
         panelInputHS.add(txtStok);
         panelKiri.add(panelInputHS, gbc);
 
-        // Kategori
         gbc.gridy = 5;
         panelKiri.add(createLabelForm("Kategori Barang"), gbc);
         
@@ -90,7 +78,6 @@ public class EditBarangView extends JDialog {
         cbKategori.setFocusable(false);
         panelKiri.add(cbKategori, gbc);
 
-        // Tanggal Kadaluarsa
         gbc.gridy = 7;
         panelKiri.add(createLabelForm("Tanggal Kadaluarsa"), gbc);
         
@@ -98,15 +85,13 @@ public class EditBarangView extends JDialog {
         txtKadaluarsa = createTextField("YYYY-MM-DD (Misal: 2026-12-31)");
         panelKiri.add(txtKadaluarsa, gbc);
 
-        // Tombol Simpan
         gbc.gridy = 9;
-        gbc.insets = new Insets(20, 0, 10, 0); // Kasih jarak agak jauh dari inputan terakhir
+        gbc.insets = new Insets(20, 0, 10, 0);
         btnSimpan = new RoundedButton("Edit Barang", 30);
         btnSimpan.setFont(new Font("SansSerif", Font.BOLD, 16));
         btnSimpan.setForeground(Color.WHITE);
         btnSimpan.setBackground(warnaOrange);
         
-        // Efek Hover Tombol
         btnSimpan.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 btnSimpan.setBackground(warnaOrange.darker());
@@ -117,13 +102,9 @@ public class EditBarangView extends JDialog {
         });
         panelKiri.add(btnSimpan, gbc);
 
-        // ==========================================
-        // [ SISI KANAN: LOGO / ILUSTRASI ]
-        // ==========================================
         JPanel panelKanan = new JPanel(new GridBagLayout());
         panelKanan.setBackground(warnaBackground);
 
-        // Kamu bisa ganti iconRegis.gif dengan icon yang khusus buat barang
         URL imgUrl = getClass().getResource("/img/iconBarang.gif"); 
         if (imgUrl != null) {
             ImageIcon iconLogo = new ImageIcon(imgUrl);
@@ -140,7 +121,6 @@ public class EditBarangView extends JDialog {
         add(panelKanan);
     }
 
-    // --- Helper Methods untuk Styling (Sama Persis Kayak Register) ---
     private JLabel createLabelForm(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -155,8 +135,6 @@ public class EditBarangView extends JDialog {
         tf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
         tf.setForeground(Color.GRAY);
         tf.setText(placeholder);
-
-        // Efek Placeholder
         tf.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (tf.getText().equals(placeholder)) {

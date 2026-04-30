@@ -7,17 +7,10 @@ import controller.ManajerController;
 
 import java.awt.*;
 
-public class ManajerView extends JFrame { // Nama class disesuaikan
-    // Warna tema khusus Manajer (Ungu)
+public class ManajerView extends JFrame {
     Color sidebarColor = new Color(126, 34, 206); 
     Color bgColor = new Color(255, 255, 255); 
-    
-    // ==========================================
-    // TOMBOL KHUSUS MENU MANAJER
-    // ==========================================
     public JButton btnDashboard, btnLaporanTransaksi, btnLaporanStok, btnLogout;
-    
-    // Wadah konten utama di kanan
     public JPanel content = new JPanel(new BorderLayout());
 
     public ManajerView(String namaUser) {
@@ -37,7 +30,6 @@ public class ManajerView extends JFrame { // Nama class disesuaikan
             }
         });
 
-        // --- SIDEBAR (Kiri) ---
         JPanel sidebar = new JPanel();
         sidebar.setBackground(sidebarColor);
         sidebar.setPreferredSize(new Dimension(260, 0));
@@ -50,17 +42,13 @@ public class ManajerView extends JFrame { // Nama class disesuaikan
         sidebar.add(lblLogo);
         sidebar.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        // ==========================================
-        // INISIALISASI TOMBOL MENU MANAJER
-        // ==========================================
         btnDashboard = addMenu(sidebar, "Dashboard");
         btnLaporanTransaksi = addMenu(sidebar, "Laporan Transaksi");
         btnLaporanStok = addMenu(sidebar, "Laporan Stok");
 
-        // Pasang Otaknya nanti di sini (Pastikan kamu udah bikin ManagerController ya)
         new ManajerController(this); 
 
-        sidebar.add(Box.createVerticalGlue()); // Dorong logout ke bawah
+        sidebar.add(Box.createVerticalGlue());
         btnLogout = addMenu(sidebar, "Logout");
         
         btnLogout.addActionListener(e -> {
@@ -70,14 +58,10 @@ public class ManajerView extends JFrame { // Nama class disesuaikan
             loginBaru.setVisible(true);
         });
 
-        // --- MAIN CONTENT (Kanan) ---
         add(sidebar, BorderLayout.WEST);
         add(content, BorderLayout.CENTER);
     }
 
-    // ==========================================
-    // FUNGSI SAKTI BUAT GANTI HALAMAN DI KANAN
-    // ==========================================
     public void tampilkanHalaman(JPanel panelBaru) {
         content.removeAll();
         content.setLayout(new BorderLayout());

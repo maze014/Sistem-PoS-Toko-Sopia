@@ -14,24 +14,22 @@ public class AdminController {
         AdminDashboardView dashboardView = new AdminDashboardView();
         new AdminDashboardController(dashboardView);
         this.adminView.tampilkanHalaman(dashboardView);
-        // Pas tombol User Management diklik
+
+        // tombol user management
         this.adminView.btnUserManage.addActionListener(e -> {
-            // 1. Bikin View untuk User Management (Harus JPanel)
             UserManagementView userView = new UserManagementView();
-
-            // 2. Pasang Controller-nya (Biar tombol di dalamnya hidup)
             new UserManagementController(userView);
-
-            // 3. PANGGIL FUNGSI SAKTI TADI!
             this.adminView.tampilkanHalaman(userView);
         });
 
+        // tombol barang management
         this.adminView.btnManageBarang.addActionListener(e -> {
             BarangManagementView barangView = new BarangManagementView();
-            new BarangManagementController(barangView);
+            new BarangManagementController(barangView, "Admin");
             this.adminView.tampilkanHalaman(barangView);
         });
 
+        // tombol dashboard admin
         this.adminView.btnDashboard.addActionListener(e -> {
             new AdminDashboardController(dashboardView);
             this.adminView.tampilkanHalaman(dashboardView);

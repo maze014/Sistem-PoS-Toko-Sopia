@@ -7,13 +7,10 @@ public class Barang {
     private int idKategori;
     private String namaBarang;
     private int harga;
-    private int stok; // Ini nanti isinya yang sudah di-hash
+    private int stok;
     private Date tanggalKadaluarsa;
-
-    // Constructor Kosong (Penting buat framework atau manual set)
     public Barang() {}
 
-    // Constructor Lengkap (Buat register/tambah user baru)
     public Barang(int idBarang, int idKategori, String namaBarang, int harga, int stok, Date tanggalKadaluarsa) {
         this.idBarang = idBarang;
         this.idKategori = idKategori;
@@ -22,8 +19,6 @@ public class Barang {
         this.stok = stok;
         this.tanggalKadaluarsa = tanggalKadaluarsa;
     }
-
-    // --- GETTER & SETTER (Wajib ada biar data bisa diambil/diubah) ---
     
     public int getIdBarang() { return idBarang; }
     public void setIdBarang(int idBarang) { this.idBarang = idBarang; }

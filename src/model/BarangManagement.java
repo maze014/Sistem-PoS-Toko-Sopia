@@ -11,11 +11,11 @@ import java.util.Date;
 import config.DBConfig;
 
 public class BarangManagement {
-public int idBarang;
+    public int idBarang;
 
     public static List<Barang> getAllBarang() {
         List<Barang> listBarang = new ArrayList<>();
-        String sql = "SELECT * FROM barang"; // Pastikan nama tabel benar
+        String sql = "SELECT * FROM barang";
 
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);
@@ -29,7 +29,6 @@ public int idBarang;
                         rs.getInt("harga"),
                         rs.getInt("stok"),
                         rs.getDate("tanggal_kadaluarsa"));
-                // Tambahkan setter ID kalau perlu untuk hapus/edit
                 listBarang.add(b);
             }
         } catch (SQLException e) {
@@ -38,10 +37,7 @@ public int idBarang;
         return listBarang;
     }
 
-    // Fungsi khusus buat nambah atau ngurangin stok pakai tombol + dan -
     public static boolean tambahBarang(int idKategori, String namaBarang, int harga, int stok, Date tanggalKadaluarsa) {
-        // Kueri ini bakal nambahin atau ngurangin stok lama dengan nilai perubahan
-        // (Kalau -1 ya stoknya berkurang, kalau +1 nambah)
         String sql = "INSERT INTO barang (id_kategori, nama_barang, harga, stok, tanggal_kadaluarsa) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConfig.getConnection();
@@ -60,9 +56,8 @@ public int idBarang;
         }
     }
 
-    public static boolean updateBarang(int idKategori, String namaBarang, int harga, int stok, Date tanggalKadaluarsa, int idBarangLama) {
-        // Kueri ini bakal nambahin atau ngurangin stok lama dengan nilai perubahan
-        // (Kalau -1 ya stoknya berkurang, kalau +1 nambah)
+    public static boolean updateBarang(int idKategori, String namaBarang, int harga, int stok, Date tanggalKadaluarsa,
+            int idBarangLama) {
         String sql = "UPDATE barang SET id_kategori = ?, nama_barang = ?, harga = ?, stok = ?, tanggal_kadaluarsa = ? WHERE id_barang = ?";
 
         try (Connection conn = DBConfig.getConnection();
@@ -83,8 +78,6 @@ public int idBarang;
     }
 
     public static boolean updateStok(int idBarang, int perubahanStok) {
-        // Kueri ini bakal nambahin atau ngurangin stok lama dengan nilai perubahan
-        // (Kalau -1 ya stoknya berkurang, kalau +1 nambah)
         String sql = "UPDATE barang SET stok = stok + ? WHERE id_barang = ?";
 
         try (Connection conn = DBConfig.getConnection();
@@ -101,20 +94,13 @@ public int idBarang;
     }
 
     public static boolean deleteBarang(int idBarang) {
-        // Peringatan: Pastikan nama tabelnya 'users' atau 'user', sesuaikan dengan
-        // databasemu!
         String sql = "DELETE FROM barang WHERE id_barang = ?";
 
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Ganti tanda tanya (?) dengan username yang mau dihapus
             ps.setInt(1, idBarang);
-
-            // Eksekusi query-nya! (executeUpdate dipakai untuk Insert, Update, Delete)
             int barisYangTerkeping = ps.executeUpdate();
-
-            // Kalau ada baris yang kehapus (lebih dari 0), berarti sukses!
             return barisYangTerkeping > 0;
 
         } catch (SQLException e) {
