@@ -2,10 +2,12 @@ package controller;
 
 import view.EditView;
 import model.User;
-import utils.HashUtil;
 import config.DBConfig;
 
 import javax.swing.JOptionPane;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -50,7 +52,7 @@ public class EditController {
             return;
         }
 
-        String passHashed = HashUtil.hashSHA256(pass);
+        String passHashed = BCrypt.hashpw(pass, BCrypt.gensalt(12));
 
         User userBaru = new User(namaD, namaB, user, passHashed, role);  
 

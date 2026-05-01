@@ -4,7 +4,7 @@ import view.*;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-import utils.HashUtil;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginController {
     private LoginView loginView;
@@ -14,7 +14,6 @@ public class LoginController {
         this.loginView.btnLogin.addActionListener(e -> {
             String user = loginView.txtUsername.getText();
             String pass = new String(loginView.txtPassword.getPassword());
-            String hashPass = HashUtil.hashSHA256(pass);
 
             try {
                 Connection conn = config.DBConfig.getConnection();
@@ -24,10 +23,9 @@ public class LoginController {
                     return;
                 }
 
-                String sql = "SELECT id_user, nama_depan, username, password, role FROM user WHERE username=? AND password=?";
+                String sql = "SELECT id_user, nama_depan, username, password, role FROM user WHERE username=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, user);
-                ps.setString(2, hashPass);
 
                 ResultSet rs = ps.executeQuery();
 
@@ -35,20 +33,26 @@ public class LoginController {
                     String idUserString = rs.getString("id_user");
                     String nama = rs.getString("nama_depan");
                     String role = rs.getString("role");
+                    String hashDariDatabase = rs.getString("password");
+                    boolean cocok = BCrypt.checkpw(pass, hashDariDatabase);
                     int idUser = Integer.parseInt(idUserString);
 
-                    if (role.equalsIgnoreCase("Admin")) {
-                        new AdminView(nama, role).setVisible(true);
-                    } else if (role.equalsIgnoreCase("Manajer")) {
-                        new ManajerView(nama).setVisible(true);
-                    } else if (role.equalsIgnoreCase("Kasir")) {
-                        new KasirView(nama, idUser).setVisible(true);
+                    if (cocok) {
+                        if (role.equalsIgnoreCase("Admin")) {
+                            new AdminView(nama, role).setVisible(true);
+                        } else if (role.equalsIgnoreCase("Manajer")) {
+                            new ManajerView(nama).setVisible(true);
+                        } else if (role.equalsIgnoreCase("Kasir")) {
+                            new KasirView(nama, idUser).setVisible(true);
+                        } else {
+                            new GudangView(user).setVisible(true);
+                        }
+                        loginView.dispose();
                     } else {
-                        new GudangView(user).setVisible(true);
+                        JOptionPane.showMessageDialog(loginView, "Username atau Password Salah!");
                     }
-                    loginView.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(loginView, "Username/Password/Role Salah!");
+                    JOptionPane.showMessageDialog(loginView, "Username atau Password Salah!");
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();

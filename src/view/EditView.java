@@ -62,8 +62,8 @@ public class EditView extends JDialog {
         gbc.gridy = 6;
         panelKiri.add(createLabelForm("Password"), gbc);
         gbc.gridy = 7;
-        txtPassword = createPasswordField("Masukkan password");
-        panelKiri.add(txtPassword, gbc);
+        
+        panelKiri.add(createPasswordWrapper("Masukkan password"), gbc);
         gbc.gridy = 8;
         panelKiri.add(createLabelForm("Posisi"), gbc);
         gbc.gridy = 9;
@@ -146,36 +146,65 @@ public class EditView extends JDialog {
         return tf;
     }
 
-    private JPasswordField createPasswordField(String placeholder) {
-        JPasswordField pf = new JPasswordField();
-        pf.setColumns(10);
-        pf.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        pf.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
-        pf.setEchoChar((char) 0);
-        pf.setText(placeholder);
-        pf.setForeground(Color.GRAY);
+    private JPanel createPasswordWrapper(String placeholder) {
+        JPanel panelWrapper = new JPanel(new BorderLayout());
+        panelWrapper.setBackground(Color.WHITE);
+        panelWrapper.setBorder(new RoundedBorder(15, new Color(51, 255, 255)));
 
-        pf.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtPassword = new JPasswordField();
+        txtPassword.setColumns(10);
+        txtPassword.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        txtPassword.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        txtPassword.setEchoChar((char) 0);
+        txtPassword.setText(placeholder);
+        txtPassword.setForeground(Color.GRAY);
+
+        JButton btnToggle = new JButton("👁️");
+        btnToggle.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        btnToggle.setContentAreaFilled(false);
+        btnToggle.setBorderPainted(false);
+        btnToggle.setFocusPainted(false);
+        btnToggle.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                String pass = new String(pf.getPassword());
+                String pass = new String(txtPassword.getPassword());
                 if (pass.equals(placeholder)) {
-                    pf.setText("");
-                    pf.setEchoChar('•');
-                    pf.setForeground(Color.BLACK);
+                    txtPassword.setText("");
+                    txtPassword.setEchoChar('•');
+                    txtPassword.setForeground(Color.BLACK);
+                    btnToggle.setText("👁️");
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                String pass = new String(pf.getPassword());
+                String pass = new String(txtPassword.getPassword());
                 if (pass.isEmpty()) {
-                    pf.setEchoChar((char) 0);
-                    pf.setText(placeholder);
-                    pf.setForeground(Color.GRAY);
+                    txtPassword.setEchoChar((char) 0);
+                    txtPassword.setText(placeholder);
+                    txtPassword.setForeground(Color.GRAY);
                 }
             }
         });
-        return pf;
+
+        btnToggle.addActionListener(e -> {
+            String pass = new String(txtPassword.getPassword());
+            if (pass.equals(placeholder) || pass.isEmpty()) return;
+
+            if (txtPassword.getEchoChar() == '•') {
+                txtPassword.setEchoChar((char) 0);
+                btnToggle.setText("🙈");
+            } else {
+                txtPassword.setEchoChar('•');
+                btnToggle.setText("👁️");
+            }
+        });
+
+        panelWrapper.add(txtPassword, BorderLayout.CENTER);
+        panelWrapper.add(btnToggle, BorderLayout.EAST);
+
+        return panelWrapper;
     }
 }
