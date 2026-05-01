@@ -1,14 +1,40 @@
 package model;
 
+import java.sql.Date;
+
 public class Barang {
-    private String nama;
+    private int idBarang;
+    private int idKategori;
+    private String namaBarang;
     private int harga;
+    private int stok;
+    private Date tanggalKadaluarsa;
+    public Barang() {}
 
-    public Barang(String nama, int harga) {
-        this.nama = nama;
+    public Barang(int idBarang, int idKategori, String namaBarang, int harga, int stok, Date tanggalKadaluarsa) {
+        this.idBarang = idBarang;
+        this.idKategori = idKategori;
+        this.namaBarang = namaBarang;
         this.harga = harga;
+        this.stok = stok;
+        this.tanggalKadaluarsa = tanggalKadaluarsa;
     }
+    
+    public int getIdBarang() { return idBarang; }
+    public void setIdBarang(int idBarang) { this.idBarang = idBarang; }
 
-    public String getNama() { return nama; }
+    public int getIdKategori() { return idKategori; }
+    public void setIdKategori(int idKategori) { this.idKategori = idKategori; }
+
+    public String getNamaBarang() { return namaBarang; }
+    public void setNamaBarang(String namaBarang) { this.namaBarang = namaBarang; }
+
     public int getHarga() { return harga; }
+    public void setHarga(int harga) { this.harga = harga; }
+
+    public int getStok() { return stok; }
+    public void setStok(int stok) { this.stok = stok; }
+
+    public Date getTanggalKadaluarsa() { return tanggalKadaluarsa; }
+    public void setTanggalKadaluarsa(Date tanggalKadaluarsa) { this.tanggalKadaluarsa = tanggalKadaluarsa; }
 }
